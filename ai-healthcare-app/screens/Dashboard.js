@@ -1,89 +1,78 @@
-import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from "react-native";
-import { LineChart } from "react-native-svg-charts";
+import React, { useEffect, useState } from "react";
+import { View, Text, StyleSheet, ActivityIndicator, Button } from "react-native";
+import { LineChart } from "react-native-chart-kit";
+import { useNavigation } from "@react-navigation/native";
 
 const Dashboard = () => {
-  const [heartbeat, setHeartbeat] = useState(72); // Default BPM
-  const [heartbeatData, setHeartbeatData] = useState([72]); // Store heartbeat trends
+  const [heartbeatData, setHeartbeatData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const navigation = useNavigation();
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      const newBeat = Math.max(60, Math.min(100, heartbeat + (Math.random() * 4 - 2))); // Simulated sensor data
-      setHeartbeat(newBeat);
-      setHeartbeatData((prev) => [...prev.slice(-15), newBeat]); // Keep last 15 values
-    }, 2000);
-    return () => clearInterval(interval);
-  }, [heartbeat]);
+    const userId = "123"; // Replace with actual user ID
+    fetch(`https://your-api-url.com/api/exercises/${userId}`)
+      .then((response) => response.json())
+      .then((data) => {
+        setHeartbeatData(data.heartbeat || []);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+        setLoading(false);
+      });
+  }, []);
 
   return (
-    <ScrollView style={styles.container}>
-      <Text style={styles.title}>Health Dashboard</Text>
+    <View style={styles.container}>
+      <Text style={styles.title}>📊 Heartbeat Trends</Text>
 
-      {/* Heartbeat Section */}
-      <View style={styles.card}>
-        <Text style={styles.label}>Heartbeat:</Text>
-        <Text style={styles.value}>{heartbeat.toFixed(1)} BPM</Text>
-      </View>
+      {/* Navigation Buttons */}
+      <Button title="Go to Chatbot" onPress={() => navigation.navigate("Chatbot")} />
+      <View style={styles.buttonSpacing} />
+      <Button title="Go to Recommendations" onPress={() => navigation.navigate("Recommendations")} />
 
-      {/* Heartbeat Graph */}
-      <View style={styles.graphContainer}>
-        <Text style={styles.graphLabel}>Heartbeat Trends</Text>
+      {loading ? (
+        <ActivityIndicator size="large" color="blue" />
+      ) : heartbeatData.length > 0 ? (
         <LineChart
-          style={styles.graph}
-          data={heartbeatData}
-          svg={{ stroke: "red", strokeWidth: 2 }}
-          contentInset={{ top: 10, bottom: 10 }}
+          data={{
+            labels: heartbeatData.map((_, index) => (index % 5 === 0 ? index.toString() : "")),
+            datasets: [{ data: heartbeatData }],
+          }}
+          width={350}
+          height={220}
+          yAxisSuffix=" bpm"
+          chartConfig={{
+            backgroundColor: "#f8f9fa",
+            backgroundGradientFrom: "#ffffff",
+            backgroundGradientTo: "#f8f9fa",
+            decimalPlaces: 0,
+            color: (opacity = 1) => `rgba(255, 0, 0, ${opacity})`,
+            labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+            style: { borderRadius: 10 },
+            propsForDots: { r: "4", strokeWidth: "2", stroke: "#ff0000" },
+          }}
+          bezier
+          style={styles.chart}
         />
-      </View>
+      ) : (
+        <Text style={styles.noData}>No heartbeat data available</Text>
+      )}
 
-      {/* Additional Health Info */}
-      <View style={styles.card}>
-        <Text style={styles.label}>Blood Pressure:</Text>
-        <Text style={styles.value}>120/80 mmHg</Text>
-      </View>
-      <View style={styles.card}>
-        <Text style={styles.label}>Oxygen Level:</Text>
-        <Text style={styles.value}>98%</Text>
-      </View>
-
-      {/* Simulated Sensor Button */}
-      <TouchableOpacity style={styles.button} onPress={() => setHeartbeat(72)}>
-        <Text style={styles.buttonText}>Reset Heartbeat</Text>
-      </TouchableOpacity>
-    </ScrollView>
+      {heartbeatData.length > 0 && (
+        <Text style={styles.heartbeat}>❤️ Current: {heartbeatData.slice(-1)[0]} bpm</Text>
+      )}
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#f5f5f5", padding: 10 },
-  title: { fontSize: 24, fontWeight: "bold", textAlign: "center", marginBottom: 20 },
-  card: {
-    backgroundColor: "#fff",
-    padding: 20,
-    borderRadius: 10,
-    marginBottom: 10,
-    alignItems: "center",
-    shadowColor: "#000",
-    shadowOpacity: 0.2,
-    shadowRadius: 5,
-    elevation: 3,
-  },
-  label: { fontSize: 18, fontWeight: "bold" },
-  value: { fontSize: 20, color: "#ff4500", fontWeight: "bold" },
-  graphContainer: {
-    backgroundColor: "#fff",
-    padding: 20,
-    borderRadius: 10,
-    marginBottom: 20,
-    shadowColor: "#000",
-    shadowOpacity: 0.2,
-    shadowRadius: 5,
-    elevation: 3,
-  },
-  graphLabel: { fontSize: 18, fontWeight: "bold", textAlign: "center", marginBottom: 10 },
-  graph: { height: 150 },
-  button: { marginTop: 20, backgroundColor: "#007BFF", padding: 15, borderRadius: 8, alignItems: "center" },
-  buttonText: { color: "white", fontSize: 16, fontWeight: "bold" },
+  container: { flex: 1, alignItems: "center", justifyContent: "center", backgroundColor: "#f8f9fa", padding: 20 },
+  title: { fontSize: 22, fontWeight: "bold", marginBottom: 10 },
+  chart: { borderRadius: 10, marginVertical: 10 },
+  noData: { fontSize: 16, color: "gray", marginTop: 10 },
+  heartbeat: { fontSize: 20, fontWeight: "bold", color: "red", marginTop: 10 },
+  buttonSpacing: { marginVertical: 10 },
 });
 
 export default Dashboard;

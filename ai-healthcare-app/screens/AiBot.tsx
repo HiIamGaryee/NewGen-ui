@@ -1,132 +1,62 @@
 import React, { useState } from "react";
-import "@chatscope/chat-ui-kit-styles/dist/default/styles.min.css";
-import {
-  MainContainer,
-  ChatContainer,
-  MessageList,
-  Message as ChatMessage,
-  MessageInput,
-  TypingIndicator,
-} from "@chatscope/chat-ui-kit-react";
-import { Box, IconButton } from "@mui/material";
-import HighlightOffRoundedIcon from "@mui/icons-material/HighlightOffRounded";
+import { View, TextInput, Button, Text, ScrollView, StyleSheet } from "react-native";
+import axios from "axios";
+import { API_KEY } from "@env"; // Import API key from .env file
 
-interface IMessage {
-  message: string;
-  sender: string;
-  direction?: "incoming" | "outgoing";
-}
+const ChatbotScreen = () => {
+  const [symptoms, setSymptoms] = useState("");
+  const [response, setResponse] = useState("");
 
-interface AiBotProps {
-  onClose: () => void;
-}
+  const handleAskAI = async () => {
+    if (!symptoms.trim()) return;
 
-const AiBotUrl = process.env.REACT_APP_AIBOT_API_KEY;
-
-const systemMessage = {
-  role: "system",
-  content:
-    "You are an AI healthcare assistant. Provide responses in a professional yet friendly tone with clear, simple explanations.",
-};
-
-const AiBot = ({ onClose }: AiBotProps) => {
-  const [messages, setMessages] = useState<IMessage[]>([
-    {
-      message: "Welcome to AI Healthcare Chatbot! How can I assist you today?",
-      sender: "ChatGPT",
-    },
-  ]);
-  const [isTyping, setIsTyping] = useState(false);
-
-  const handleSend = async (message: string) => {
-    const newMessage: IMessage = {
-      message,
-      direction: "outgoing",
-      sender: "user",
-    };
-
-    const newMessages = [...messages, newMessage];
-    setMessages(newMessages);
-    setIsTyping(true);
-    await processMessageToChatGPT(newMessages);
-  };
-
-  async function processMessageToChatGPT(chatMessages: IMessage[]) {
-    let apiMessages = chatMessages.map((messageObject) => {
-      return {
-        role: messageObject.sender === "ChatGPT" ? "assistant" : "user",
-        content: messageObject.message,
-      };
-    });
-
-    const apiRequestBody = {
-      model: "gpt-3.5-turbo",
-      messages: [systemMessage, ...apiMessages],
-    };
+    const prompt = `I have the following symptoms: ${symptoms}. What could be the possible illness, and what should I do?`;
 
     try {
-      const response = await fetch("https://api.openai.com/v1/chat/completions", {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${AiBotUrl}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(apiRequestBody),
-      });
-
-      const data = await response.json();
-      setMessages([
-        ...chatMessages,
+      const res = await axios.post(
+        "https://api.openai.com/v1/chat/completions",
         {
-          message: data.choices[0].message.content,
-          sender: "ChatGPT",
+          model: "gpt-4",
+          messages: [{ role: "user", content: prompt }],
+          temperature: 0.7,
         },
-      ]);
+        {
+          headers: {
+            Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      setResponse(res.data.choices[0].message.content);
     } catch (error) {
-      console.error("Error fetching AI response:", error);
-      setMessages([
-        ...chatMessages,
-        {
-          message: "Sorry, there was an error processing your request.",
-          sender: "ChatGPT",
-        },
-      ]);
+      console.error(error);
+      setResponse("Error retrieving medical advice. Please try again.");
     }
-    setIsTyping(false);
-  }
+  };
 
   return (
-    <Box sx={{ pr: 2, position: "relative" }}>
-      <IconButton
-        onClick={onClose}
-        style={{ position: "absolute", right: 0, top: 0 }}
-      >
-        <HighlightOffRoundedIcon />
-      </IconButton>
-      <Box sx={{ position: "relative", height: "450px", width: "500px" }}>
-        <MainContainer>
-          <ChatContainer>
-            <MessageList
-              scrollBehavior="smooth"
-              typingIndicator={isTyping ? <TypingIndicator content="AI Healthcare Assistant is typing..." /> : null}
-            >
-              {messages.map((message, index) => (
-                <ChatMessage
-                  key={index}
-                  model={{
-                    message: message.message,
-                    direction: message.direction ?? "incoming",
-                    position: "single",
-                  }}
-                />
-              ))}
-            </MessageList>
-            <MessageInput placeholder="Ask a healthcare question..." onSend={handleSend} />
-          </ChatContainer>
-        </MainContainer>
-      </Box>
-    </Box>
+    <View style={styles.container}>
+      <Text style={styles.label}>Enter your symptoms:</Text>
+      <TextInput
+        style={styles.input}
+        placeholder="e.g., fever, headache, sore throat"
+        value={symptoms}
+        onChangeText={setSymptoms}
+      />
+      <Button title="Diagnose" onPress={handleAskAI} />
+      <ScrollView style={styles.outputContainer}>
+        <Text style={styles.response}>{response}</Text>
+      </ScrollView>
+    </View>
   );
 };
 
-export default AiBot;
+const styles = StyleSheet.create({
+  container: { padding: 20, flex: 1, backgroundColor: "#fff" },
+  label: { fontSize: 16, fontWeight: "bold", marginBottom: 10 },
+  input: { borderWidth: 1, padding: 10, marginBottom: 10, borderRadius: 5 },
+  outputContainer: { marginTop: 20, padding: 10, backgroundColor: "#f4f4f4" },
+  response: { fontSize: 16, color: "#333" },
+});
+
+export default ChatbotScreen;

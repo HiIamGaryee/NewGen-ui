@@ -10,7 +10,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     const userId = "123"; // Replace with actual user ID
-    fetch(`https://your-api-url.com/api/exercises/${userId}`)
+    fetch(`http://localhost:5000/api/heartbeat/${userId}`)
       .then((response) => response.json())
       .then((data) => {
         setHeartbeatData(data.heartbeat || []);

@@ -1,62 +1,63 @@
-import React, { useEffect, useState } from "react";
-import { View, Text, TextInput, Button, FlatList, StyleSheet } from "react-native";
+import React, { useState } from "react";
+import { View, Text, TextInput, ScrollView, TouchableOpacity, ActivityIndicator } from "react-native";
+import { OpenAI } from "openai";
 
-const Chatbot = () => {
-  const [messages, setMessages] = useState([]);
-  const [inputMessage, setInputMessage] = useState("");
-  const userId = "123"; // Replace with actual user ID
+const openai = new OpenAI({ apiKey: "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", dangerouslyAllowBrowser: true });
 
-  useEffect(() => {
-    fetch(`https://your-api-url.com/api/chatbot/history/${userId}`)
-      .then((response) => response.json())
-      .then((data) => setMessages(data.history || []))
-      .catch((error) => console.error("Error fetching chat history:", error));
-  }, []);
+const ChatbotScreen = () => {
+  const [symptoms, setSymptoms] = useState("");
+  const [response, setResponse] = useState([]);
+  const [loading, setLoading] = useState(false);
 
-  const sendMessage = () => {
-    if (!inputMessage.trim()) return;
+  const handleDiagnosis = async () => {
+    if (!symptoms.trim()) return;
 
-    fetch("https://your-api-url.com/api/chatbot/message", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ userId, message: inputMessage }),
-    })
-      .then((response) => response.json())
-      .then((data) => setMessages([...messages, { text: inputMessage, response: data.reply }]))
-      .catch((error) => console.error("Error sending message:", error));
+    setLoading(true);
+    setResponse((prev) => [...prev, { type: "user", text: symptoms }]);
 
-    setInputMessage("");
+    try {
+      const aiResponse = await openai.chat.completions.create({
+        model: "gpt-4",
+        messages: [
+          { role: "system", content: "You are a medical AI chatbot that provides diagnoses based on symptoms." },
+          { role: "user", content: `My symptoms are: ${symptoms}. What could be the possible diagnosis?` },
+        ],
+      });
+
+      setResponse((prev) => [...prev, { type: "ai", text: aiResponse.choices[0].message.content }]);
+    } catch (error) {
+      setResponse((prev) => [...prev, { type: "ai", text: "Error fetching response. Try again." }]);
+    } finally {
+      setLoading(false);
+    }
+    
+    setSymptoms("");
   };
 
   return (
-    <View style={styles.container}>
-      <FlatList
-        data={messages}
-        keyExtractor={(item, index) => index.toString()}
-        renderItem={({ item }) => (
-          <View style={styles.messageContainer}>
-            <Text style={styles.userMessage}>You: {item.text}</Text>
-            <Text style={styles.botMessage}>Bot: {item.response}</Text>
+    <View style={{ flex: 1, padding: 20, backgroundColor: "#f5f5f5" }}>
+      <ScrollView style={{ flex: 1 }} contentContainerStyle={{ paddingBottom: 20 }}>
+        {response.map((msg, index) => (
+          <View key={index} style={{ marginBottom: 10, alignSelf: msg.type === "user" ? "flex-end" : "flex-start", backgroundColor: msg.type === "user" ? "#007AFF" : "#ddd", padding: 10, borderRadius: 10 }}>
+            <Text style={{ color: msg.type === "user" ? "#fff" : "#000" }}>{msg.text}</Text>
           </View>
-        )}
-      />
+        ))}
+      </ScrollView>
+
+      {loading && <ActivityIndicator size="large" color="#007AFF" />}
+
       <TextInput
-        style={styles.input}
-        placeholder="Type a message..."
-        value={inputMessage}
-        onChangeText={setInputMessage}
+        style={{ height: 50, backgroundColor: "#fff", borderRadius: 10, paddingHorizontal: 10, marginBottom: 10 }}
+        placeholder="Enter your symptoms..."
+        value={symptoms}
+        onChangeText={setSymptoms}
       />
-      <Button title="Send" onPress={sendMessage} />
+
+      <TouchableOpacity onPress={handleDiagnosis} style={{ backgroundColor: "#007AFF", padding: 15, borderRadius: 10, alignItems: "center" }}>
+        <Text style={{ color: "#fff", fontWeight: "bold" }}>Get Diagnosis</Text>
+      </TouchableOpacity>
     </View>
   );
 };
 
-const styles = StyleSheet.create({
-  container: { flex: 1, padding: 20, backgroundColor: "#fff" },
-  messageContainer: { marginBottom: 10 },
-  userMessage: { fontWeight: "bold", color: "blue" },
-  botMessage: { fontWeight: "bold", color: "green" },
-  input: { height: 40, borderColor: "gray", borderWidth: 1, marginBottom: 10, paddingHorizontal: 10 },
-});
-
-export default Chatbot;
+export default ChatbotScreen;

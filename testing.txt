@@ -1,0 +1,12 @@
+run on server
+
+1. cd server
+2. node server.js
+   -> and go to local host 8080
+
+run client
+
+1. cd client
+2.npx expo start     
+   -> and go to local host 5173
+3. press w on it 

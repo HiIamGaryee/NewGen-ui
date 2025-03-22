@@ -6,6 +6,7 @@ import Login from "./screens/Login";
 import Dashboard from "./screens/Dashboard";
 import Chatbot from "./screens/Chatbot";
 import Recommendations from "./screens/Recommendations";
+import SignUpV2 from "./screens/SignUpV2";
 
 const Stack = createStackNavigator();
 
@@ -14,6 +15,7 @@ export default function App() {
     <NavigationContainer>
       <Stack.Navigator initialRouteName="SignUp">
         <Stack.Screen name="SignUp" component={SignUp} />
+        <Stack.Screen name="SignUpv2" component={SignUpV2} />
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Dashboard" component={Dashboard} />
         <Stack.Screen name="Chatbot" component={Chatbot} />

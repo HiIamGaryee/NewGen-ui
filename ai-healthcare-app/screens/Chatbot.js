@@ -1,35 +1,62 @@
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, TextInput, TouchableOpacity, FlatList, StyleSheet } from 'react-native';
 
-const Chatbot = ({ navigation }) => {  // Add navigation as prop
+const Chatbot = ({ navigation }) => {
+  const [messages, setMessages] = useState([]);
+  const [input, setInput] = useState('');
+
+  const handleSend = () => {
+    if (input.trim() === '') return;
+    
+    // Add user message to chat
+    const newMessages = [...messages, { text: input, sender: 'user' }];
+    setMessages(newMessages);
+    setInput('');
+    
+    // Simulate AI response (replace with API call later)
+    setTimeout(() => {
+      setMessages([...newMessages, { text: 'Processing your symptoms...', sender: 'bot' }]);
+    }, 1000);
+  };
+
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>AI Assistant Chatbot</Text>
-      <Text style={styles.subtitle}>How can I help you today?</Text>
-      
-      {/* Add Chatbot logic here */}
-      
-      {/* Back button to return to Health screen */}
-      <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-        <Text style={styles.backButtonText}>Back to Health Screen</Text>
-      </TouchableOpacity>
-
-      {/* New Button to navigate somewhere else (for example, Chatbot functionality) */}
-      <TouchableOpacity style={styles.newButton} onPress={() => alert("Navigate to new functionality!")}>
-        <Text style={styles.newButtonText}>Go to New Functionality</Text>
-      </TouchableOpacity>
+      <Text style={styles.title}>AI Health Assistant</Text>
+      <FlatList
+        data={messages}
+        keyExtractor={(item, index) => index.toString()}
+        renderItem={({ item }) => (
+          <View style={[styles.messageBubble, item.sender === 'user' ? styles.userBubble : styles.botBubble]}>
+            <Text style={styles.messageText}>{item.text}</Text>
+          </View>
+        )}
+      />
+      <View style={styles.inputContainer}>
+        <TextInput
+          style={styles.input}
+          placeholder="Enter your symptoms..."
+          value={input}
+          onChangeText={setInput}
+        />
+        <TouchableOpacity style={styles.sendButton} onPress={handleSend}>
+          <Text style={styles.sendButtonText}>Send</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 20, justifyContent: 'center', alignItems: 'center', backgroundColor: '#f8f9fa' },
-  title: { fontSize: 24, fontWeight: "bold", textAlign: "center" },
-  subtitle: { fontSize: 16, textAlign: "center", color: "#6c757d", marginVertical: 20 },
-  backButton: { backgroundColor: "#003366", padding: 10, borderRadius: 5, marginTop: 20 },
-  backButtonText: { color: "#fff", fontSize: 16, textAlign: "center" },
-  newButton: { backgroundColor: "#28a745", padding: 10, borderRadius: 5, marginTop: 20 },  // New button
-  newButtonText: { color: "#fff", fontSize: 16, textAlign: "center" },
+  container: { flex: 1, padding: 20, backgroundColor: '#f8f9fa' },
+  title: { fontSize: 22, fontWeight: 'bold', textAlign: 'center', marginBottom: 10 },
+  inputContainer: { flexDirection: 'row', alignItems: 'center', marginTop: 10 },
+  input: { flex: 1, borderWidth: 1, borderColor: '#ccc', borderRadius: 5, padding: 10, backgroundColor: '#fff' },
+  sendButton: { marginLeft: 10, backgroundColor: '#007bff', padding: 10, borderRadius: 5 },
+  sendButtonText: { color: '#fff', fontWeight: 'bold' },
+  messageBubble: { padding: 10, borderRadius: 10, marginVertical: 5, maxWidth: '80%' },
+  userBubble: { backgroundColor: '#007bff', alignSelf: 'flex-end' },
+  botBubble: { backgroundColor: '#e9ecef', alignSelf: 'flex-start' },
+  messageText: { color: '#fff' }
 });
 
 export default Chatbot;

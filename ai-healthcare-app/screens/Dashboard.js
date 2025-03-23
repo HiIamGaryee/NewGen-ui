@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from "react-native";
 import Svg, { Polyline } from "react-native-svg";
+import GoogleFit, { Scopes } from "react-native-google-fit";
 
 const Dashboard = () => {
   const [age, setAge] = useState("");
@@ -41,6 +42,31 @@ const Dashboard = () => {
       category = "Obese ❌";
     }
     setBmiCategory(category);
+  };
+
+  const fetchHeartRate = () => {
+    const options = {
+      scopes: [
+        Scopes.FITNESS_ACTIVITY_READ,
+        Scopes.FITNESS_BODY_READ,
+        Scopes.FITNESS_HEART_RATE_READ,
+      ],
+    };
+
+    GoogleFit.authorize(options).then((authResult) => {
+      if (authResult.success) {
+        GoogleFit.getHeartRateSamples({
+          startDate: "2025-03-20T00:00:17.971Z", // ISO format
+          endDate: new Date().toISOString(),
+        }).then((res) => {
+          if (res.length > 0) {
+            setHeartbeat(res[res.length - 1].value);
+          }
+        });
+      } else {
+        console.log("Google Fit authorization failed");
+      }
+    });
   };
 
   return (
@@ -87,9 +113,9 @@ const Dashboard = () => {
         <Text style={styles.buttonText}>Calculate BMI</Text>
       </TouchableOpacity>
 
-      {/* Small Test Button */}
-      <TouchableOpacity style={styles.testButton}>
-        <Text style={styles.testButtonText}>Test</Text>
+      {/* Test Button to Fetch Heart Rate */}
+      <TouchableOpacity style={styles.testButton} onPress={fetchHeartRate}>
+        <Text style={styles.testButtonText}>Test Heartbeat</Text>
       </TouchableOpacity>
 
       {bmi && (
@@ -111,8 +137,6 @@ const styles = StyleSheet.create({
   resultContainer: { marginTop: 10, alignItems: "center" },
   bmiText: { fontSize: 18, fontWeight: "bold", marginTop: 10 },
   bmiCategory: { fontSize: 18, fontWeight: "bold", marginTop: 5, color: "#002147" },
-
-  // Button Styles
   button: {
     width: "60%",
     backgroundColor: "#002147",
@@ -121,13 +145,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: 10,
   },
-  buttonText: {
-    color: "#fff",
-    fontSize: 18,
-    fontWeight: "bold",
-  },
-
-  // Small Test Button
+  buttonText: { color: "#fff", fontSize: 18, fontWeight: "bold" },
   testButton: {
     width: "40%",
     backgroundColor: "#002147",
@@ -136,11 +154,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: 10,
   },
-  testButtonText: {
-    color: "#fff",
-    fontSize: 16,
-    fontWeight: "bold",
-  },
+  testButtonText: { color: "#fff", fontSize: 16, fontWeight: "bold" },
 });
 
 export default Dashboard;

@@ -1,0 +1,15 @@
+{
+    "health": {
+      "metric_saved": "Métricas de salud guardadas con éxito.",
+      "error_saving": "No se pudieron guardar las métricas."
+    },
+    "user": {
+      "not_found": "Usuario no encontrado"
+    },
+    "heartbeat": {
+      "updated": "Frecuencia cardíaca actualizada con éxito"
+    },
+    "error": {
+      "internal": "Error del servidor: {{detail}}"
+    }
+  }

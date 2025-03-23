@@ -1,0 +1,15 @@
+{
+    "health": {
+      "metric_saved": "健康指标保存成功。",
+      "error_saving": "保存健康指标失败。"
+    },
+    "user": {
+      "not_found": "未找到用户"
+    },
+    "heartbeat": {
+      "updated": "心率更新成功"
+    },
+    "error": {
+      "internal": "服务器错误：{{detail}}"
+    }
+  }

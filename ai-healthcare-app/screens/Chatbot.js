@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, FlatList, StyleSheet, Alert, Linking } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, FlatList, StyleSheet, Linking } from 'react-native';
 
 const Chatbot = ({ navigation }) => {
   const [messages, setMessages] = useState([]);
@@ -7,7 +7,7 @@ const Chatbot = ({ navigation }) => {
 
   const medicalDatabase = [
     { symptoms: ['fever', 'cough', 'tiredness'], diagnosis: "It appears you may have a common flu. Stay hydrated, rest well, and monitor your symptoms. If they worsen, consider seeing a doctor." },
-    { symptoms: ['chest pain', 'shortness of breath', 'dizziness'], diagnosis: "Your symptoms could indicate a serious heart condition. Please seek immediate medical attention. Calling 999 now is advisable." },
+    { symptoms: ['chest pain', 'shortness of breath', 'dizziness'], diagnosis: "Your symptoms could indicate a serious heart condition. Please seek immediate medical attention. 🚨 Call 999 now: " },
     { symptoms: ['headache', 'blurred vision', 'weakness'], diagnosis: "These could be signs of high blood pressure or a neurological issue. It is best to consult a healthcare professional soon." },
     { symptoms: ['abdominal pain', 'nausea', 'vomiting'], diagnosis: "This could be related to food poisoning or digestive issues. Stay hydrated and rest. If symptoms persist, seek medical advice." },
     { symptoms: ['skin rash', 'itching', 'swelling'], diagnosis: "This may be an allergic reaction. Avoid potential allergens and take antihistamines if necessary. Seek medical help if symptoms worsen." },
@@ -33,14 +33,13 @@ const Chatbot = ({ navigation }) => {
     setTimeout(() => {
       const response = analyzeSymptoms(input);
       setMessages([...newMessages, { text: response, sender: 'bot' }]);
-
-      if (response.includes('Calling 999 now')) {
-        Alert.alert('Emergency Alert', 'Your symptoms indicate an emergency. Would you like to call 999 now?', [
-          { text: 'Cancel', style: 'cancel' },
-          { text: 'Call 999', onPress: () => Linking.openURL('tel:999') }
-        ]);
-      }
     }, 1000);
+  };
+
+  const handleEmergencyCall = (message) => {
+    if (message.includes("Call 999 now")) {
+      Linking.openURL('tel:999');
+    }
   };
 
   return (
@@ -50,9 +49,14 @@ const Chatbot = ({ navigation }) => {
         data={messages}
         keyExtractor={(item, index) => index.toString()}
         renderItem={({ item }) => (
-          <View style={[styles.messageBubble, item.sender === 'user' ? styles.userBubble : styles.botBubble]}>
-            <Text style={styles.messageText}>{item.text}</Text>
-          </View>
+          <TouchableOpacity 
+            onPress={() => handleEmergencyCall(item.text)} 
+            activeOpacity={item.text.includes("Call 999 now") ? 0.6 : 1}
+          >
+            <View style={[styles.messageBubble, item.sender === 'user' ? styles.userBubble : styles.botBubble]}>
+              <Text style={styles.messageText}>{item.text}</Text>
+            </View>
+          </TouchableOpacity>
         )}
       />
       <View style={styles.inputContainer}>

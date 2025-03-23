@@ -3,6 +3,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Ionicons } from "@expo/vector-icons"; // For icons in tab bar
+import { TouchableOpacity, Text } from "react-native";
 import SignUp from "./screens/SignUp";
 import Login from "./screens/Login";
 import Dashboard from "./screens/Dashboard";
@@ -16,9 +17,20 @@ const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
 // Bottom Tab Navigator
-function MainTabs() {
+function MainTabs({ navigation }) {
   return (
-    <Tab.Navigator screenOptions={{ headerShown: false }}>
+    <Tab.Navigator
+      screenOptions={({ navigation }) => ({
+        headerRight: () => (
+          <TouchableOpacity
+            onPress={() => navigation.navigate("Login")}
+            style={{ marginRight: 15 }}
+          >
+            <Text style={{ color: "#002147", fontSize: 16, fontWeight: "bold" }}>Logout</Text>
+          </TouchableOpacity>
+        ),
+      })}
+    >
       <Tab.Screen
         name="Dashboard"
         component={Dashboard}

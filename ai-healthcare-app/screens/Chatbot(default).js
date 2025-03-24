@@ -1,44 +1,39 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, FlatList, StyleSheet, Linking } from 'react-native';
 
-const API_KEY = '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'; // Replace with your actual OpenAI API key
-
 const Chatbot = ({ navigation }) => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
 
-  const fetchAIResponse = async (userInput) => {
-    try {
-      const response = await fetch('https://api.openai.com/v1/chat/completions', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${API_KEY}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          model: 'gpt-3.5-turbo',
-          messages: [{ role: 'system', content: 'You are a medical AI assistant.' }, { role: 'user', content: userInput }],
-          max_tokens: 150,
-        }),
-      });
+  const medicalDatabase = [
+    { symptoms: ['fever', 'cough', 'tiredness'], diagnosis: "It appears you may have a common flu. Stay hydrated, rest well, and monitor your symptoms. If they worsen, consider seeing a doctor." },
+    { symptoms: ['chest pain', 'shortness of breath', 'dizziness'], diagnosis: "Your symptoms could indicate a serious heart condition. Please seek immediate medical attention. 🚨 Call 999 now: " },
+    { symptoms: ['headache', 'blurred vision', 'weakness'], diagnosis: "These could be signs of high blood pressure or a neurological issue. It is best to consult a healthcare professional soon." },
+    { symptoms: ['abdominal pain', 'nausea', 'vomiting'], diagnosis: "This could be related to food poisoning or digestive issues. Stay hydrated and rest. If symptoms persist, seek medical advice." },
+    { symptoms: ['skin rash', 'itching', 'swelling'], diagnosis: "This may be an allergic reaction. Avoid potential allergens and take antihistamines if necessary. Seek medical help if symptoms worsen." },
+  ];
 
-      const data = await response.json();
-      return data.choices[0].message.content;
-    } catch (error) {
-      console.error('Error fetching AI response:', error);
-      return "I'm sorry, I couldn't process your request. Please try again later.";
+  const analyzeSymptoms = (userInput) => {
+    const lowerCaseInput = userInput.toLowerCase();
+    for (const condition of medicalDatabase) {
+      if (condition.symptoms.some(symptom => lowerCaseInput.includes(symptom))) {
+        return condition.diagnosis;
+      }
     }
+    return "I'm unable to provide an exact diagnosis based on the given symptoms. I strongly recommend consulting a healthcare professional for a more precise assessment.";
   };
 
-  const handleSend = async () => {
+  const handleSend = () => {
     if (input.trim() === '') return;
 
     const newMessages = [...messages, { text: input, sender: 'user' }];
     setMessages(newMessages);
     setInput('');
 
-    const response = await fetchAIResponse(input);
-    setMessages([...newMessages, { text: response, sender: 'bot' }]);
+    setTimeout(() => {
+      const response = analyzeSymptoms(input);
+      setMessages([...newMessages, { text: response, sender: 'bot' }]);
+    }, 1000);
   };
 
   const handleEmergencyCall = (message) => {

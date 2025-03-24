@@ -3,6 +3,7 @@
 An AI-powered healthcare mobile application built using React Native and Expo. This app integrates OpenAI's API for AI-driven meal recommendations, symptom-based disease detection, and emergency services.
 
 ## 🚀 Features
+
 - **AI Meal Recommendations**: Get personalized meal plans based on dietary preferences.
 - **Symptom Checker**: Input symptoms and receive possible diagnoses.
 - **Emergency Call**: Directly call emergency services (999) when needed.
@@ -28,21 +29,25 @@ Here are some of the key dependencies used in this project:
 ## 🛠 Installation & Setup
 
 ### 1️⃣ Prerequisites
+
 - Install [Node.js](https://nodejs.org/)
 - Install [Expo CLI](https://docs.expo.dev/get-started/installation/)
 
 ### 2️⃣ Clone the Repository
+
 ```sh
-git clone https://github.com/your-repo/ai-healthcare-app.git
+git clone https://github.com/HiIamGaryee/NewGen-ui.git
 cd ai-healthcare-app
 ```
 
 ### 3️⃣ Install Dependencies
+
 ```sh
 npm install
 ```
 
 ### 4️⃣ Run the App
+
 ```sh
 npx expo start
 ```
@@ -50,12 +55,13 @@ npx expo start
 Use the Expo Go app to scan the QR code and run it on your mobile device.
 
 ## 🤝 Contribution
+
 Feel free to fork the repo and submit pull requests! If you encounter any issues, open an issue in the repository.
 
 ## 📜 License
+
 This project is licensed under the **0BSD** License.
 
 ---
 
 ⭐ **Star this repo if you find it useful!** ⭐
-

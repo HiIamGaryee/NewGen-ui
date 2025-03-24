@@ -1,4 +1,4 @@
-# brewed-in-chaos
+# NewGen-ui
 
 A coffee shop webpage which involved Web3 and AI by ---> Team COMPILE TIME CHAOS
 This project was created by React, Mui and cosmocloud (as backend). \

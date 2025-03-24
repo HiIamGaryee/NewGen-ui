@@ -8,6 +8,13 @@ import gameRoutes from "./routes/gameRoutes.js";
 import dietRoutes from "./routes/dietRoutes.js";
 import healthRoutes from "./routes/healthRoutes.js";
 import cors from "cors";
+import i18n from "i18n";
+import path from "path";
+import { fileURLToPath } from "url";
+
+// __dirname in ES Modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // Load environment variables from .env file
 dotenv.config();
@@ -29,6 +36,14 @@ app.use(
     cookie: { secure: false }, // Set to true if using HTTPS
   })
 );
+//i18n configuration
+i18n.configure({
+  locales: ['en', 'es', 'zh'],
+  directory: path.join(__dirname, 'locales'),
+  defaultLocale: 'en',
+  objectNotation: true
+});
+app.use(i18n.init);
 
 // MongoDB Connection
 mongoose

@@ -1,0 +1,10 @@
+{
+  "logout": "Logout",
+  "logout_failed": "Logout failed. Please try again.",
+  "ai_chatbot": "AI Chatbot",
+  "dashboard": "Dashboard",
+  "diet": "Diet",
+  "game": "Game",
+  "health": "Health",
+  "report": "Report"
+}

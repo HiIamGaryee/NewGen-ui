@@ -5,6 +5,8 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Ionicons } from "@expo/vector-icons"; 
 import { TouchableOpacity, Text } from "react-native";
 import axios from "axios";
+import { useTranslation } from "react-i18next";
+import { View, StyleSheet, SafeAreaView } from "react-native";
 
 import SignUp from "./screens/SignUp";
 import Login from "./screens/Login";
@@ -14,6 +16,8 @@ import Game from "./screens/Game";
 import Health from "./screens/Health";
 import Report from "./screens/Report";
 import Chatbot from "./screens/Chatbot";
+import './src/i18n';
+import LanguageSwitcher from "./src/components/LanguageSwitcher";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -21,6 +25,7 @@ const AuthContext = createContext();
 
 // Logout Function
 const LogoutButton = ({ navigation }) => {
+  const { t } = useTranslation();
   const { setUser } = useContext(AuthContext);
 
   const handleLogout = async () => {
@@ -29,14 +34,14 @@ const LogoutButton = ({ navigation }) => {
       setUser(null); // Clear authentication state
       navigation.replace("Login"); // Redirect to login page
     } catch (error) {
-      alert("Logout failed. Please try again.");
+      alert(t('logout_failed'));
     }
   };
 
   return (
     <TouchableOpacity onPress={handleLogout} style={{ marginRight: 15 }}>
       <Text style={{ color: "#002147", fontSize: 16, fontWeight: "bold" }}>
-        Logout
+      {t('logout')}
       </Text>
     </TouchableOpacity>
   );
@@ -44,6 +49,8 @@ const LogoutButton = ({ navigation }) => {
 
 // Bottom Tab Navigator
 function MainTabs({ navigation }) {
+  const { t } = useTranslation(); 
+
   return (
     <Tab.Navigator
       screenOptions={{
@@ -54,6 +61,7 @@ function MainTabs({ navigation }) {
         name="Dashboard"
         component={Dashboard}
         options={{
+          title: t('dashboard'),
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="home" color={color} size={size} />
           ),
@@ -63,6 +71,7 @@ function MainTabs({ navigation }) {
         name="Diet"
         component={Diet}
         options={{
+          title: t('diet'),
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="fast-food" color={color} size={size} />
           ),
@@ -72,6 +81,7 @@ function MainTabs({ navigation }) {
         name="Game"
         component={Game}
         options={{
+          title: t('game'),
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="game-controller" color={color} size={size} />
           ),
@@ -81,6 +91,7 @@ function MainTabs({ navigation }) {
         name="Health"
         component={Health}
         options={{
+          title: t('health'),
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="heart" color={color} size={size} />
           ),
@@ -90,6 +101,7 @@ function MainTabs({ navigation }) {
         name="Report"
         component={Report}
         options={{
+          title: t('report'),
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="bar-chart" color={color} size={size} />
           ),
@@ -101,18 +113,35 @@ function MainTabs({ navigation }) {
 
 // Main App Component
 export default function App() {
+  const { t } = useTranslation();
+
   const [user, setUser] = useState(null); // Manage authentication state
 
   return (
     <AuthContext.Provider value={{ user, setUser }}>
-      <NavigationContainer>
-        <Stack.Navigator initialRouteName="SignUp">
-          <Stack.Screen name="SignUp" component={SignUp} options={{ headerShown: false }} />
-          <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
-          <Stack.Screen name="Dashboard" component={MainTabs} options={{ headerShown: false }} />
-          <Stack.Screen name="Chatbot" component={Chatbot} options={{ headerShown: true, title: "AI Chatbot" }} />
-        </Stack.Navigator>
-      </NavigationContainer>
+      <SafeAreaView style={styles.container}>
+        <View style={styles.content}>
+          <NavigationContainer>
+            <Stack.Navigator initialRouteName="SignUp">
+            <Stack.Screen name="SignUp" component={SignUp} options={{ headerShown: false }} />
+            <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
+            <Stack.Screen name="Dashboard" component={MainTabs} options={{ headerShown: false }} />
+            <Stack.Screen name="Chatbot" component={Chatbot} options={{ headerShown: true, title: t('ai_chatbot') }} />
+            </Stack.Navigator>
+          </NavigationContainer>
+        </View>
+      < LanguageSwitcher />      
+      </SafeAreaView>
     </AuthContext.Provider>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff'
+  },
+  content: {
+    flex: 1
+  }
+});

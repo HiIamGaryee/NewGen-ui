@@ -57,6 +57,11 @@ app.use("/api/games", gameRoutes);
 app.use("/api/diet", dietRoutes);
 app.use("/api/health", healthRoutes);
 
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({ message: "Something broke!" });
+});
+
 // Specify the port to listen on
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {

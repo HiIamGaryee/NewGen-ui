@@ -1,15 +1,36 @@
 import express from "express";
-import User from "../models/User.js";
+import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
+import session from "express-session";
+import User from "./models/User"; // Adjust the import path as necessary
 
-const router = express.Router();
+const app = express();
 
-router.post("/register", async (req, res) => {
+app.use(express.json());
+app.use(
+  session({
+    secret: "your-secret-key",
+    resave: false,
+    saveUninitialized: false,
+    cookie: { secure: false }, // use true if you're using HTTPS
+  })
+);
+
+mongoose
+  .connect("mongodb://localhost/yourDatabase", {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => console.log("MongoDB connected..."))
+  .catch((err) => console.log(err));
+
+app.post("/api/auth/register", async (req, res) => {
   const { email, password, username, gender, age } = req.body;
   try {
     const existingUser = await User.findOne({ email });
-    if (existingUser) return res.status(400).send("User already exists");
-
+    if (existingUser) {
+      return res.status(400).send("User already exists");
+    }
     const hashedPassword = await bcrypt.hash(password, 12);
     const user = new User({
       email,
@@ -25,7 +46,7 @@ router.post("/register", async (req, res) => {
   }
 });
 
-router.post("/login", async (req, res) => {
+app.post("/api/auth/login", async (req, res) => {
   const { email, password } = req.body;
   try {
     const user = await User.findOne({ email });
@@ -41,29 +62,14 @@ router.post("/login", async (req, res) => {
   }
 });
 
-router.get("/profile", async (req, res) => {
-  try {
-    if (!req.session.user) {
-      return res.status(401).send("Not authenticated");
-    }
-    const user = await User.findById(req.session.user).select("-password"); // Exclude the password from the result
-    if (!user) {
-      return res.status(404).send("User not found");
-    }
-    res.json(user);
-  } catch (error) {
-    res.status(500).send(error.message);
-  }
-});
-
-router.post("/logout", (req, res) => {
+app.post("/api/auth/logout", (req, res) => {
   req.session.destroy((err) => {
     if (err) {
       return res.status(500).send("Failed to log out.");
     }
-
     res.send("Logged out successfully");
   });
 });
 
-export default router;
+const PORT = process.env.PORT || 8080;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

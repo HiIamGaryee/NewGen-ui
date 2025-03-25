@@ -1,41 +1,39 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, TouchableOpacity, Alert, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  Alert,
+  StyleSheet,
+} from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import { useAuth } from "../context/AuthContext";
 
 const Login = () => {
   const navigation = useNavigation();
+  const { login } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState(""); // State for storing error message
 
   const handleLogin = async () => {
     if (!email || !password) {
       Alert.alert("Error", "Please enter email and password.");
+      return;
     }
 
-    try {
-      const response = await fetch("http://localhost:8080/api/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email: email,
-          password: password,
-        }),
-      });
-
-      const data = await response.json();
-      if (response.ok) {
-        Alert.alert("Success", "Login successful!");
-      } else {
-        Alert.alert("Login Failed", data.message || "Invalid email or password.");
-      }
-    } catch (error) {
-      console.error("Login Error:", error);
-      Alert.alert("Login Error", "Unable to connect to the server.");
+    const result = await login(email, password);
+    if (result.success) {
+      Alert.alert("Success", "Login successful!");
+      navigation.replace("Dashboard"); // Use replace to ensure the user cannot go back to the login screen
+    } else {
+      setErrorMessage(result.message || "Invalid email or password.");
+      Alert.alert(
+        "Login Failed",
+        result.message || "Invalid email or password."
+      );
     }
-
-    navigation.navigate("Dashboard"); // Navigate to Dashboard in all cases
   };
 
   return (
@@ -48,6 +46,8 @@ const Login = () => {
         placeholderTextColor="#555"
         value={email}
         onChangeText={setEmail}
+        keyboardType="email-address"
+        autoCapitalize="none"
       />
       <TextInput
         style={styles.input}
@@ -57,14 +57,19 @@ const Login = () => {
         onChangeText={setPassword}
         secureTextEntry
       />
-
+      {errorMessage ? (
+        <Text style={styles.errorText}>{errorMessage}</Text>
+      ) : null}
       <TouchableOpacity style={styles.button} onPress={handleLogin}>
         <Text style={styles.buttonText}>Login</Text>
       </TouchableOpacity>
 
       <Text style={styles.registerText}>
-        Don't have an account?{" "}
-        <Text style={styles.registerLink} onPress={() => navigation.navigate("SignUpV2")}>
+        Don't have an account?
+        <Text
+          style={styles.registerLink}
+          onPress={() => navigation.navigate("SignUpV2")}
+        >
           Sign Up
         </Text>
       </Text>
@@ -118,6 +123,12 @@ const styles = StyleSheet.create({
   registerLink: {
     color: "#002147",
     fontWeight: "bold",
+  },
+  errorText: {
+    color: "#ff0000",
+    fontSize: 14,
+    marginTop: 5,
+    marginBottom: 5,
   },
 });
 

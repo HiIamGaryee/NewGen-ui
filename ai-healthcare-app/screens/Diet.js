@@ -6,24 +6,21 @@ const Diet = () => {
   const [vegetables, setVegetables] = useState("");
   const [meats, setMeats] = useState("");
   const [mealPlan, setMealPlan] = useState({ breakfast: "", lunch: "", dinner: "" });
+  const [randomMeal, setRandomMeal] = useState(null);
 
-  // Meal Plan Suggestions
-  const mealSuggestions = {
-    Balanced: {
-      breakfast: "Oatmeal with banana 🍌",
-      lunch: "Grilled chicken & rice 🍗",
-      dinner: "Salmon with quinoa 🐟",
-    },
-    Vegetarian: {
-      breakfast: "Smoothie bowl 🍓",
-      lunch: "Vegetable stir-fry 🍛",
-      dinner: "Lentil soup & bread 🍞",
-    },
-    Keto: {
-      breakfast: "Omelet with spinach 🍳",
-      lunch: "Grilled steak & avocado 🥑",
-      dinner: "Salmon with butter sauce 🐟",
-    },
+  // Fetch random meal from API
+  const fetchRandomMeal = async () => {
+    try {
+      const response = await fetch("https://www.themealdb.com/api/json/v1/1/random.php");
+      const data = await response.json();
+      if (data.meals) {
+        setRandomMeal(data.meals[0]);
+      } else {
+        Alert.alert("Error", "Failed to fetch meal recommendation.");
+      }
+    } catch (error) {
+      Alert.alert("Error", "An error occurred while fetching meal data.");
+    }
   };
 
   // Generate Meal Plan
@@ -32,17 +29,16 @@ const Diet = () => {
       Alert.alert("Error", "Please enter your favorite vegetables and meats.");
       return;
     }
-    setMealPlan(mealSuggestions[selectedPreference]);
+    fetchRandomMeal();
   };
 
   return (
     <ScrollView style={styles.container}>
       <Text style={styles.title}>Personalized Diet Plan 🍽️</Text>
 
-      {/* Dietary Preferences */}
       <Text style={styles.subtitle}>Select Your Dietary Preference:</Text>
       <View style={styles.optionsContainer}>
-        {Object.keys(mealSuggestions).map((option) => (
+        {["Balanced", "Vegetarian", "Keto"].map((option) => (
           <TouchableOpacity
             key={option}
             style={[styles.optionButton, selectedPreference === option && styles.selectedOption]}
@@ -53,27 +49,24 @@ const Diet = () => {
         ))}
       </View>
 
-      {/* User Preferences */}
       <Text style={styles.subtitle}>Your Favorite Vegetables:</Text>
       <TextInput style={styles.input} placeholder="e.g., Broccoli, Carrot..." value={vegetables} onChangeText={setVegetables} />
 
       <Text style={styles.subtitle}>Your Favorite Meats:</Text>
       <TextInput style={styles.input} placeholder="e.g., Chicken, Beef..." value={meats} onChangeText={setMeats} />
 
-      {/* Generate Meal Plan */}
       <TouchableOpacity style={styles.darkBlueButton} onPress={generateMealPlan}>
         <Text style={styles.darkBlueButtonText}>Get Meal Plan 🍽️</Text>
       </TouchableOpacity>
 
-      {/* Display Meal Plan */}
-      {mealPlan.breakfast ? (
+      {randomMeal && (
         <View style={styles.mealContainer}>
-          <Text style={styles.mealTitle}>Meal Plan for the Day:</Text>
-          <Text style={styles.mealText}>🥞 Breakfast: {mealPlan.breakfast}</Text>
-          <Text style={styles.mealText}>🥗 Lunch: {mealPlan.lunch}</Text>
-          <Text style={styles.mealText}>🍛 Dinner: {mealPlan.dinner}</Text>
+          <Text style={styles.mealTitle}>Recommended Meal:</Text>
+          <Text style={styles.mealText}>🍽️ {randomMeal.strMeal}</Text>
+          <Text style={styles.mealText}>🌍 Origin: {randomMeal.strArea}</Text>
+          <Text style={styles.mealText}>🥘 Category: {randomMeal.strCategory}</Text>
         </View>
-      ) : null}
+      )}
     </ScrollView>
   );
 };

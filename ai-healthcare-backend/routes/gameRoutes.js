@@ -3,35 +3,48 @@ import User from "../models/User.js";
 
 const router = express.Router();
 
+/**
+ * @route   POST /api/games/score
+ * @desc    Save a game score for the currently logged-in user
+ * @access  Private (requires session)
+ */
 router.post("/score", async (req, res) => {
   const { score } = req.body;
   const userId = req.session.user;
 
   if (!userId) {
-    return res.status(401).json({ message: "Unauthorized" });
+    return res.status(401).json({ error: "Unauthorized - not logged in" });
   }
 
   try {
     const user = await User.findById(userId);
-    if (!user) return res.status(404).json({ message: "User not found" });
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
 
     user.gameScores.push({ date: new Date(), score });
     await user.save();
+
     res.json({ message: "Score added successfully" });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ error: error.message });
   }
 });
 
-// Get all game scores for a user
+/**
+ * @route   GET /api/games/scores/:userId
+ * @desc    Get all game scores for a specific user
+ * @access  Public or Private (adjust if you use sessions)
+ */
 router.get("/scores/:userId", async (req, res) => {
   try {
     const user = await User.findById(req.params.userId);
-    if (!user) return res.status(404).json({ message: "User not found" });
-
-    res.json(user.gameScores);
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+    res.json({ gameScores: user.gameScores });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ error: error.message });
   }
 });
 

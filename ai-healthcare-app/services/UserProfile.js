@@ -19,7 +19,7 @@ const UserProfile = () => {
       });
       const data = await response.json();
       if (response.ok) {
-        setProfile(data);
+        setProfile(data.user);
       } else {
         Alert.alert(
           "Profile Error",

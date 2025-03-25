@@ -1,8 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  ActivityIndicator,
+} from "react-native";
 import he from "he";
 
-const API_URL = "https://the-trivia-api.com/api/questions?categories=science&limit=10&tags=health"; 
+const API_URL =
+  "https://the-trivia-api.com/api/questions?categories=science&limit=10&tags=health";
 
 const Game = () => {
   const [questions, setQuestions] = useState([]);
@@ -49,8 +56,33 @@ const Game = () => {
       setCurrentQuestion((prevQuestion) => prevQuestion + 1);
     } else {
       setShowResult(true);
+      // postScore();
     }
   };
+
+  // const postScore = async () => {
+  //   try {
+  //     const response = await fetch("http://localhost:8080/api/games/score", {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       credentials: "include",
+  //       body: JSON.stringify({
+  //         score: score,
+  //       }),
+  //     });
+
+  //     const result = await response.json();
+  //     if (response.ok) {
+  //       console.log("Score posted successfully:", result);
+  //     } else {
+  //       console.error("Failed to post score:", result.message);
+  //     }
+  //   } catch (error) {
+  //     console.error("Error posting score:", error);
+  //   }
+  // };
 
   const restartQuiz = () => {
     setCurrentQuestion(0);
@@ -77,22 +109,33 @@ const Game = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Health & Medicine Quiz 🏥</Text>
-      <Text style={styles.timer}>Time Left: {Math.floor(timeLeft / 60)}:{String(timeLeft % 60).padStart(2, "0")}</Text>
+      <Text style={styles.timer}>
+        Time Left: {Math.floor(timeLeft / 60)}:
+        {String(timeLeft % 60).padStart(2, "0")}
+      </Text>
 
       {loading ? (
         <ActivityIndicator size="large" color="#003366" />
       ) : showResult ? (
         <View style={styles.resultContainer}>
-          <Text style={styles.resultText}>Your Score: {score} / {questions.length} 🎉</Text>
+          <Text style={styles.resultText}>
+            Your Score: {score} / {questions.length} 🎉
+          </Text>
           <TouchableOpacity style={styles.button} onPress={restartQuiz}>
             <Text style={styles.buttonText}>Play Again 🔄</Text>
           </TouchableOpacity>
         </View>
       ) : (
         <View style={styles.quizContainer}>
-          <Text style={styles.question}>{questions[currentQuestion].question}</Text>
+          <Text style={styles.question}>
+            {questions[currentQuestion].question}
+          </Text>
           {questions[currentQuestion].options.map((option, index) => (
-            <TouchableOpacity key={index} style={styles.optionButton} onPress={() => handleAnswer(option)}>
+            <TouchableOpacity
+              key={index}
+              style={styles.optionButton}
+              onPress={() => handleAnswer(option)}
+            >
               <Text style={styles.optionText}>{option}</Text>
             </TouchableOpacity>
           ))}
@@ -103,16 +146,50 @@ const Game = () => {
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: "#f8f9fa", padding: 20 },
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#f8f9fa",
+    padding: 20,
+  },
   title: { fontSize: 24, fontWeight: "bold", marginBottom: 20, color: "#000" },
-  timer: { fontSize: 18, fontWeight: "bold", color: "#d9534f", marginBottom: 15 },
+  timer: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#d9534f",
+    marginBottom: 15,
+  },
   quizContainer: { alignItems: "center", width: "100%" },
-  question: { fontSize: 18, fontWeight: "bold", textAlign: "center", marginBottom: 15, color: "#000" },
-  optionButton: { width: "90%", padding: 15, backgroundColor: "#003366", borderRadius: 10, marginBottom: 10, alignItems: "center" },
+  question: {
+    fontSize: 18,
+    fontWeight: "bold",
+    textAlign: "center",
+    marginBottom: 15,
+    color: "#000",
+  },
+  optionButton: {
+    width: "90%",
+    padding: 15,
+    backgroundColor: "#003366",
+    borderRadius: 10,
+    marginBottom: 10,
+    alignItems: "center",
+  },
   optionText: { color: "#FFFFFF", fontSize: 16, fontWeight: "bold" },
   resultContainer: { alignItems: "center", marginTop: 20 },
-  resultText: { fontSize: 20, fontWeight: "bold", marginBottom: 15, color: "#000" },
-  button: { backgroundColor: "#003366", padding: 15, borderRadius: 10, marginTop: 10 },
+  resultText: {
+    fontSize: 20,
+    fontWeight: "bold",
+    marginBottom: 15,
+    color: "#000",
+  },
+  button: {
+    backgroundColor: "#003366",
+    padding: 15,
+    borderRadius: 10,
+    marginTop: 10,
+  },
   buttonText: { color: "#FFFFFF", fontSize: 18, fontWeight: "bold" },
 });
 

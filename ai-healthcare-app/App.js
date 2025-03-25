@@ -1,9 +1,11 @@
-import React from "react";
+import React, { createContext, useContext, useState } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { Ionicons } from "@expo/vector-icons"; // For icons in tab bar
+import { Ionicons } from "@expo/vector-icons"; 
 import { TouchableOpacity, Text } from "react-native";
+import axios from "axios";
+
 import SignUp from "./screens/SignUp";
 import Login from "./screens/Login";
 import Dashboard from "./screens/Dashboard";
@@ -15,27 +17,38 @@ import Chatbot from "./screens/Chatbot";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
+const AuthContext = createContext();
 
-// http://localhost:8080/api/auth/logout
+// Logout Function
+const LogoutButton = ({ navigation }) => {
+  const { setUser } = useContext(AuthContext);
+
+  const handleLogout = async () => {
+    try {
+      await axios.post("http://localhost:8080/api/auth/logout");
+      setUser(null); // Clear authentication state
+      navigation.replace("Login"); // Redirect to login page
+    } catch (error) {
+      alert("Logout failed. Please try again.");
+    }
+  };
+
+  return (
+    <TouchableOpacity onPress={handleLogout} style={{ marginRight: 15 }}>
+      <Text style={{ color: "#002147", fontSize: 16, fontWeight: "bold" }}>
+        Logout
+      </Text>
+    </TouchableOpacity>
+  );
+};
 
 // Bottom Tab Navigator
 function MainTabs({ navigation }) {
   return (
     <Tab.Navigator
-      screenOptions={({ navigation }) => ({
-        headerRight: () => (
-          <TouchableOpacity
-            onPress={() => navigation.navigate("Login")}
-            style={{ marginRight: 15 }}
-          >
-            <Text
-              style={{ color: "#002147", fontSize: 16, fontWeight: "bold" }}
-            >
-              Logout
-            </Text>
-          </TouchableOpacity>
-        ),
-      })}
+      screenOptions={{
+        headerRight: () => <LogoutButton navigation={navigation} />,
+      }}
     >
       <Tab.Screen
         name="Dashboard"
@@ -86,32 +99,20 @@ function MainTabs({ navigation }) {
   );
 }
 
-// Stack Navigator
+// Main App Component
 export default function App() {
+  const [user, setUser] = useState(null); // Manage authentication state
+
   return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName="SignUp">
-        <Stack.Screen
-          name="SignUp"
-          component={SignUp}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="Login"
-          component={Login}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="Dashboard"
-          component={MainTabs}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="Chatbot"
-          component={Chatbot}
-          options={{ headerShown: true, title: "AI Chatbot" }}
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <AuthContext.Provider value={{ user, setUser }}>
+      <NavigationContainer>
+        <Stack.Navigator initialRouteName="SignUp">
+          <Stack.Screen name="SignUp" component={SignUp} options={{ headerShown: false }} />
+          <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
+          <Stack.Screen name="Dashboard" component={MainTabs} options={{ headerShown: false }} />
+          <Stack.Screen name="Chatbot" component={Chatbot} options={{ headerShown: true, title: "AI Chatbot" }} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </AuthContext.Provider>
   );
 }

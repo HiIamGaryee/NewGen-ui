@@ -1,15 +1,26 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, TouchableOpacity, Alert, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  Alert,
+  StyleSheet,
+} from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import { useTranslation } from "react-i18next"; 
 
 const Login = () => {
   const navigation = useNavigation();
+  const { t } = useTranslation(); 
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const handleLogin = async () => {
     if (!email || !password) {
-      Alert.alert("Error", "Please enter email and password.");
+      Alert.alert(t("error"), t("fill_email_password")); 
+      return;
     }
 
     try {
@@ -18,40 +29,37 @@ const Login = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          email: email,
-          password: password,
-        }),
+        body: JSON.stringify({ email, password }),
       });
 
       const data = await response.json();
       if (response.ok) {
-        Alert.alert("Success", "Login successful!");
+        Alert.alert(t("success"), t("login_success")); 
       } else {
-        Alert.alert("Login Failed", data.message || "Invalid email or password.");
+        Alert.alert(t("login_failed"), data.message || t("invalid_credentials")); // ✅ updated
       }
     } catch (error) {
       console.error("Login Error:", error);
-      Alert.alert("Login Error", "Unable to connect to the server.");
+      Alert.alert(t("login_error"), t("server_error")); 
     }
 
-    navigation.navigate("Dashboard"); // Navigate to Dashboard in all cases
+    navigation.navigate("Dashboard");
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Login</Text>
+      <Text style={styles.title}>{t("login")}</Text> 
 
       <TextInput
         style={styles.input}
-        placeholder="Email"
+        placeholder={t("email")} 
         placeholderTextColor="#555"
         value={email}
         onChangeText={setEmail}
       />
       <TextInput
         style={styles.input}
-        placeholder="Password"
+        placeholder={t("password")} 
         placeholderTextColor="#555"
         value={password}
         onChangeText={setPassword}
@@ -59,13 +67,16 @@ const Login = () => {
       />
 
       <TouchableOpacity style={styles.button} onPress={handleLogin}>
-        <Text style={styles.buttonText}>Login</Text>
+        <Text style={styles.buttonText}>{t("login")}</Text> 
       </TouchableOpacity>
 
       <Text style={styles.registerText}>
-        Don't have an account?{" "}
-        <Text style={styles.registerLink} onPress={() => navigation.navigate("SignUpV2")}>
-          Sign Up
+        {t("no_account")}{" "}
+        <Text
+          style={styles.registerLink}
+          onPress={() => navigation.navigate("SignUpV2")}
+        >
+          {t("sign_up")} 
         </Text>
       </Text>
     </View>

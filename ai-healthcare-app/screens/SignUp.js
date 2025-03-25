@@ -10,11 +10,14 @@ import {
   StyleSheet,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import { useTranslation } from "react-i18next";
 
-const genders = ["Male", "Female"];
+const genders = ["male", "female"];
 
 const SignUp = () => {
   const navigation = useNavigation();
+  const { t } = useTranslation();
+
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -25,11 +28,11 @@ const SignUp = () => {
 
   const handleSignUp = async () => {
     if (!username || !email || !password || !confirmPassword || !gender || !age) {
-      Alert.alert("Error", "Please fill in all fields.");
+      Alert.alert(t("error"), t("fill_all_fields"));
       return;
     }
     if (password !== confirmPassword) {
-      Alert.alert("Error", "Passwords do not match.");
+      Alert.alert(t("error"), t("password_mismatch"));
       return;
     }
 
@@ -52,31 +55,31 @@ const SignUp = () => {
 
       const data = await response.json();
       if (response.ok) {
-        Alert.alert("Success", "User registered successfully");
+        Alert.alert(t("success"), t("registration_successful"));
         navigation.replace("Dashboard"); // Navigate to Dashboard on success
       } else {
-        Alert.alert("Registration Failed", data.message || "Something went wrong");
+        Alert.alert(t("registration_failed"), data.message || t("something_wrong"));
       }
     } catch (error) {
       console.error("Error:", error);
-      Alert.alert("Error", "Unable to connect to the server");
+      Alert.alert(t("error"), t("server_error"));
     }
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Sign Up</Text>
+      <Text style={styles.title}>{t("sign_up")}</Text>
 
       <TextInput
         style={styles.input}
-        placeholder="Username"
+        placeholder={t("username")}
         placeholderTextColor="#999"
         value={username}
         onChangeText={setUsername}
       />
       <TextInput
         style={styles.input}
-        placeholder="Email"
+        placeholder={t("email")}
         placeholderTextColor="#999"
         value={email}
         onChangeText={setEmail}
@@ -84,7 +87,7 @@ const SignUp = () => {
       />
       <TextInput
         style={styles.input}
-        placeholder="Password"
+        placeholder={t("password")}
         placeholderTextColor="#999"
         value={password}
         onChangeText={setPassword}
@@ -92,7 +95,7 @@ const SignUp = () => {
       />
       <TextInput
         style={styles.input}
-        placeholder="Confirm Password"
+        placeholder={t("confirm_password")}
         placeholderTextColor="#999"
         value={confirmPassword}
         onChangeText={setConfirmPassword}
@@ -102,7 +105,7 @@ const SignUp = () => {
       {/* Gender Selection */}
       <TouchableOpacity style={styles.input} onPress={() => setModalVisible(true)}>
         <Text style={gender ? styles.inputText : styles.placeholderText}>
-          {gender || "Select Gender"}
+        {gender ? t(gender.toLowerCase()) : t("select_gender")}
         </Text>
       </TouchableOpacity>
 
@@ -121,12 +124,12 @@ const SignUp = () => {
                     setModalVisible(false);
                   }}
                 >
-                  <Text style={styles.genderText}>{item}</Text>
+                  <Text style={styles.genderText}>{t(item.toLowerCase())}</Text>
                 </TouchableOpacity>
               )}
             />
             <TouchableOpacity onPress={() => setModalVisible(false)}>
-              <Text style={styles.cancelText}>Cancel</Text>
+              <Text style={styles.cancelText}>{t("cancel")}</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -134,7 +137,7 @@ const SignUp = () => {
 
       <TextInput
         style={styles.input}
-        placeholder="Age"
+        placeholder={t("age")}
         placeholderTextColor="#999"
         value={age}
         onChangeText={setAge}
@@ -142,13 +145,13 @@ const SignUp = () => {
       />
 
       <TouchableOpacity style={styles.button} onPress={handleSignUp}>
-        <Text style={styles.buttonText}>Sign Up</Text>
+        <Text style={styles.buttonText}>{t("sign_up")}</Text>
       </TouchableOpacity>
 
       <Text style={styles.loginText}>
-        Already have an account?{" "}
+      {t("already_have_account")}{" "}
         <Text style={styles.loginLink} onPress={() => navigation.navigate("Login")}>
-          Login
+        {t("login")}
         </Text>
       </Text>
     </View>

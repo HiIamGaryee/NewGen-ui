@@ -16,6 +16,8 @@ import Chatbot from "./screens/Chatbot";
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
+// http://localhost:8080/api/auth/logout
+
 // Bottom Tab Navigator
 function MainTabs({ navigation }) {
   return (
@@ -26,7 +28,11 @@ function MainTabs({ navigation }) {
             onPress={() => navigation.navigate("Login")}
             style={{ marginRight: 15 }}
           >
-            <Text style={{ color: "#002147", fontSize: 16, fontWeight: "bold" }}>Logout</Text>
+            <Text
+              style={{ color: "#002147", fontSize: 16, fontWeight: "bold" }}
+            >
+              Logout
+            </Text>
           </TouchableOpacity>
         ),
       })}
@@ -34,27 +40,47 @@ function MainTabs({ navigation }) {
       <Tab.Screen
         name="Dashboard"
         component={Dashboard}
-        options={{ tabBarIcon: ({ color, size }) => <Ionicons name="home" color={color} size={size} /> }}
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="home" color={color} size={size} />
+          ),
+        }}
       />
       <Tab.Screen
         name="Diet"
         component={Diet}
-        options={{ tabBarIcon: ({ color, size }) => <Ionicons name="fast-food" color={color} size={size} /> }}
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="fast-food" color={color} size={size} />
+          ),
+        }}
       />
       <Tab.Screen
         name="Game"
         component={Game}
-        options={{ tabBarIcon: ({ color, size }) => <Ionicons name="game-controller" color={color} size={size} /> }}
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="game-controller" color={color} size={size} />
+          ),
+        }}
       />
       <Tab.Screen
         name="Health"
         component={Health}
-        options={{ tabBarIcon: ({ color, size }) => <Ionicons name="heart" color={color} size={size} /> }}
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="heart" color={color} size={size} />
+          ),
+        }}
       />
       <Tab.Screen
         name="Report"
         component={Report}
-        options={{ tabBarIcon: ({ color, size }) => <Ionicons name="bar-chart" color={color} size={size} /> }}
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="bar-chart" color={color} size={size} />
+          ),
+        }}
       />
     </Tab.Navigator>
   );
@@ -65,10 +91,26 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="SignUp">
-        <Stack.Screen name="SignUp" component={SignUp} options={{ headerShown: false }} />
-        <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
-        <Stack.Screen name="Dashboard" component={MainTabs} options={{ headerShown: false }} />
-        <Stack.Screen name="Chatbot" component={Chatbot} options={{ headerShown: true, title: "AI Chatbot" }} />
+        <Stack.Screen
+          name="SignUp"
+          component={SignUp}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Login"
+          component={Login}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Dashboard"
+          component={MainTabs}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Chatbot"
+          component={Chatbot}
+          options={{ headerShown: true, title: "AI Chatbot" }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -41,4 +41,29 @@ router.post("/login", async (req, res) => {
   }
 });
 
+router.get("/profile", async (req, res) => {
+  try {
+    if (!req.session.user) {
+      return res.status(401).send("Not authenticated");
+    }
+    const user = await User.findById(req.session.user).select("-password"); // Exclude the password from the result
+    if (!user) {
+      return res.status(404).send("User not found");
+    }
+    res.json(user);
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
+});
+
+router.post("/logout", (req, res) => {
+  req.session.destroy((err) => {
+    if (err) {
+      return res.status(500).send("Failed to log out.");
+    }
+
+    res.send("Logged out successfully");
+  });
+});
+
 export default router;

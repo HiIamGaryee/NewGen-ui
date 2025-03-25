@@ -8,7 +8,8 @@ router.post("/record", async (req, res) => {
   const { userId, date, exerciseMinutes, waterIntake, weight } = req.body;
   try {
     const user = await User.findById(userId);
-    if (!user) return res.status(404).json({ message: res.__("user,not_found") });
+    if (!user)
+      return res.status(404).json({ message: res.__("user,not_found") });
 
     user.healthRecords.push({ date, exerciseMinutes, waterIntake, weight });
     await user.save();
@@ -22,11 +23,14 @@ router.post("/record", async (req, res) => {
 router.get("/records/:userId", async (req, res) => {
   try {
     const user = await User.findById(req.params.userId);
-    if (!user) return res.status(404).json({ message: res.__("user.not_found") });
+    if (!user)
+      return res.status(404).json({ message: res.__("user.not_found") });
 
     res.json(user.healthRecords);
   } catch (error) {
-    res.status(500).json({ message: res.__("error.internal", { detail: error.message}) });
+    res
+      .status(500)
+      .json({ message: res.__("error.internal", { detail: error.message }) });
   }
 });
 
@@ -42,7 +46,23 @@ router.post("/heartbeat", async (req, res) => {
     await user.save();
     res.send(res.__("heartbeat.updated"));
   } catch (error) {
-    res.status(500).send(res.__("error.internal", { detail: error.message}));
+    res.status(500).send(res.__("error.internal", { detail: error.message }));
+  }
+});
+
+router.post("/add-medicine", async (req, res) => {
+  const { userId, medicineName, reminderTime } = req.body;
+  try {
+    const user = await User.findById(userId);
+    if (!user) return res.status(404).json({ message: "User not found" });
+    user.reminders.push({ medicineName, reminderTime });
+    await user.save();
+    res.json({
+      message: "Medicine reminder added successfully",
+      reminder: { medicineName, reminderTime },
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
 });
 

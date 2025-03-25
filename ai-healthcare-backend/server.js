@@ -8,7 +8,7 @@ import gameRoutes from "./routes/gameRoutes.js";
 import dietRoutes from "./routes/dietRoutes.js";
 import healthRoutes from "./routes/healthRoutes.js";
 import cors from "cors";
-import i18n from "i18n";
+// import i18n from "i18n";
 import path from "path";
 import { fileURLToPath } from "url";
 
@@ -37,13 +37,13 @@ app.use(
   })
 );
 //i18n configuration
-i18n.configure({
-  locales: ['en', 'es', 'zh'],
-  directory: path.join(__dirname, 'locales'),
-  defaultLocale: 'en',
-  objectNotation: true
-});
-app.use(i18n.init);
+// i18n.configure({
+//   locales: ['en', 'es', 'zh'],
+//   directory: path.join(__dirname, 'locales'),
+//   defaultLocale: 'en',
+//   objectNotation: true
+// });
+// app.use(i18n.init);
 
 // MongoDB Connection
 mongoose

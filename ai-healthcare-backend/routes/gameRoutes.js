@@ -3,9 +3,14 @@ import User from "../models/User.js";
 
 const router = express.Router();
 
-// Post a game score
 router.post("/score", async (req, res) => {
-  const { userId, score } = req.body;
+  const { score } = req.body;
+  const userId = req.session.user;
+
+  if (!userId) {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
+
   try {
     const user = await User.findById(userId);
     if (!user) return res.status(404).json({ message: "User not found" });

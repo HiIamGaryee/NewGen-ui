@@ -1,7 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+} from "react-native";
 import Svg, { Polyline } from "react-native-svg";
 import GoogleFit, { Scopes } from "react-native-google-fit";
+import UserProfile from "../services/UserProfile";
 
 const Dashboard = () => {
   const [age, setAge] = useState("");
@@ -24,7 +31,10 @@ const Dashboard = () => {
   const calculateBMI = () => {
     if (weight && height) {
       const heightInMeters = parseFloat(height) / 100;
-      const bmiValue = (parseFloat(weight) / (heightInMeters * heightInMeters)).toFixed(2);
+      const bmiValue = (
+        parseFloat(weight) /
+        (heightInMeters * heightInMeters)
+      ).toFixed(2);
       setBmi(bmiValue);
       determineBMICategory(bmiValue);
     }
@@ -72,6 +82,7 @@ const Dashboard = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Health Dashboard</Text>
+      <UserProfile />
 
       {/* Heartbeat Graph */}
       <Svg height="100" width="300" style={styles.heartbeatGraph}>
@@ -129,14 +140,31 @@ const Dashboard = () => {
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 20, alignItems: "center", backgroundColor: "#fff" },
+  container: {
+    flex: 1,
+    padding: 20,
+    alignItems: "center",
+    backgroundColor: "#fff",
+  },
   title: { fontSize: 24, fontWeight: "bold", marginBottom: 20 },
   heartbeatGraph: { marginBottom: 10 },
   heartbeatText: { fontSize: 18, color: "red", marginBottom: 20 },
-  input: { width: "80%", height: 40, borderColor: "gray", borderWidth: 1, marginBottom: 10, paddingHorizontal: 10 },
+  input: {
+    width: "80%",
+    height: 40,
+    borderColor: "gray",
+    borderWidth: 1,
+    marginBottom: 10,
+    paddingHorizontal: 10,
+  },
   resultContainer: { marginTop: 10, alignItems: "center" },
   bmiText: { fontSize: 18, fontWeight: "bold", marginTop: 10 },
-  bmiCategory: { fontSize: 18, fontWeight: "bold", marginTop: 5, color: "#002147" },
+  bmiCategory: {
+    fontSize: 18,
+    fontWeight: "bold",
+    marginTop: 5,
+    color: "#002147",
+  },
   button: {
     width: "60%",
     backgroundColor: "#002147",

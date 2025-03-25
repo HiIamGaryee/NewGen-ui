@@ -5,11 +5,12 @@ const router = express.Router();
 
 /**
  * @route   POST /api/games/score
- * @desc    Save a game score for the currently logged-in user
- * @access  Private (requires session)
+ * @desc    Save a game score for the currently logged-in user (by session)
+ * @access  Private
  */
 router.post("/score", async (req, res) => {
   const { score } = req.body;
+  // Check the session user ID
   const userId = req.session.user;
 
   if (!userId) {
@@ -22,6 +23,7 @@ router.post("/score", async (req, res) => {
       return res.status(404).json({ error: "User not found" });
     }
 
+    // "gameScores" array is defined in our schema, so we can safely push
     user.gameScores.push({ date: new Date(), score });
     await user.save();
 

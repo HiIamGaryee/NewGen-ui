@@ -1,0 +1,10 @@
+{
+  "logout": "登出",
+  "logout_failed": "登出失败。请再试一次。",
+  "ai_chatbot": "AI 聊天机器人",
+  "dashboard": "仪表盘",
+  "diet": "饮食",
+  "game": "游戏",
+  "health": "健康",
+  "report": "报告"
+}

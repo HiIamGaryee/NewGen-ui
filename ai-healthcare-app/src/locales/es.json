@@ -1,0 +1,10 @@
+{
+  "logout": "Cerrar sesión",
+  "logout_failed": "Error al cerrar sesión. Inténtalo de nuevo.",
+  "ai_chatbot": "Chatbot de IA",
+  "dashboard": "Panel",
+  "diet": "Dieta",
+  "game": "Juego",
+  "health": "Salud",
+  "report": "Informe"
+}

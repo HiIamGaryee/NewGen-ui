@@ -84,5 +84,11 @@
   "underweight": "体重过轻 😕",
   "healthy": "健康体重 ✅",
   "overweight": "超重 ⚠️",
-  "obese": "肥胖 ❌"
+  "obese": "肥胖 ❌",
+  "recommended_meal": "推荐的餐点：",
+  "meal_name": "🍽️ {{meal}}",
+  "meal_origin": "🌍 来源：{{origin}}",
+  "meal_category": "🥘 类别：{{category}}",
+  "fetch_meal_error": "获取推荐餐点失败。",
+  "fetch_meal_api_error": "获取餐点数据时出错。"
 }

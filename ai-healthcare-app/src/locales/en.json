@@ -78,5 +78,11 @@
   "underweight": "Underweight 😕",
   "healthy": "Healthy Weight ✅",
   "overweight": "Overweight ⚠️",
-  "obese": "Obese ❌"
+  "obese": "Obese ❌",
+  "recommended_meal": "Recommended Meal:",
+  "meal_name": "🍽️ {{meal}}",
+  "meal_origin": "🌍 Origin: {{origin}}",
+  "meal_category": "🥘 Category: {{category}}",
+  "fetch_meal_error": "Failed to fetch meal recommendation.",
+  "fetch_meal_api_error": "An error occurred while fetching meal data."
 }

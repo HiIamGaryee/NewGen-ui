@@ -84,6 +84,12 @@
   "underweight": "Kurus 😕",
   "healthy": "Berat sihat ✅",
   "overweight": "Berat berlebihan ⚠️",
-  "obese": "Obes ❌"  
+  "obese": "Obes ❌",
+  "recommended_meal": "Cadangan Hidangan:",
+  "meal_name": "🍽️ {{meal}}",
+  "meal_origin": "🌍 Asal: {{origin}}",
+  "meal_category": "🥘 Kategori: {{category}}",
+  "fetch_meal_error": "Gagal mendapatkan cadangan hidangan.",
+  "fetch_meal_api_error": "Ralat semasa mendapatkan data hidangan."  
   }
   

@@ -9,17 +9,20 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useTranslation } from "react-i18next"; 
+import { useAuth } from "../context/AuthContext";
 
 const Login = () => {
   const navigation = useNavigation();
   const { t } = useTranslation(); 
+  const { login } = useAuth();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState(""); // State for storing error message
 
   const handleLogin = async () => {
     if (!email || !password) {
-      Alert.alert(t("error"), t("fill_email_password")); 
+      Alert.alert(t("error"), t("fill_email_password"));
       return;
     }
 
@@ -32,19 +35,21 @@ const Login = () => {
         body: JSON.stringify({ email, password }),
       });
 
-      const data = await response.json();
-      if (response.ok) {
-        Alert.alert(t("success"), t("login_success")); 
+      const result = await login(email, password);
+      if (result.success) {
+        Alert.alert(t("success"), t("login_success"));
+        navigation.replace("Dashboard");
       } else {
-        Alert.alert(t("login_failed"), data.message || t("invalid_credentials")); // ✅ updated
+        setErrorMessage(result.message || t("invalid_credentials"));
+        Alert.alert(t("login_failed"), result.message || t("invalid_credentials"));
       }
     } catch (error) {
       console.error("Login Error:", error);
-      Alert.alert(t("login_error"), t("server_error")); 
+      Alert.alert(t("login_error"), t("server_error"));
     }
-
     navigation.navigate("Dashboard");
   };
+
 
   return (
     <View style={styles.container}>
@@ -56,6 +61,8 @@ const Login = () => {
         placeholderTextColor="#555"
         value={email}
         onChangeText={setEmail}
+        keyboardType="email-address"
+        autoCapitalize="none"
       />
       <TextInput
         style={styles.input}
@@ -65,18 +72,22 @@ const Login = () => {
         onChangeText={setPassword}
         secureTextEntry
       />
-
+      {errorMessage ? (
+        <Text style={styles.errorText}>{errorMessage}</Text>
+      ) : null}
       <TouchableOpacity style={styles.button} onPress={handleLogin}>
         <Text style={styles.buttonText}>{t("login")}</Text> 
       </TouchableOpacity>
 
       <Text style={styles.registerText}>
         {t("no_account")}{" "}
+        
         <Text
           style={styles.registerLink}
           onPress={() => navigation.navigate("SignUpV2")}
         >
           {t("sign_up")} 
+          
         </Text>
       </Text>
     </View>
@@ -129,6 +140,12 @@ const styles = StyleSheet.create({
   registerLink: {
     color: "#002147",
     fontWeight: "bold",
+  },
+  errorText: {
+    color: "#ff0000",
+    fontSize: 14,
+    marginTop: 5,
+    marginBottom: 5,
   },
 });
 

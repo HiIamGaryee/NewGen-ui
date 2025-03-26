@@ -58,33 +58,33 @@ const Game = () => {
       setCurrentQuestion((prevQuestion) => prevQuestion + 1);
     } else {
       setShowResult(true);
-      // postScore();
+      postScore();
     }
   };
 
-  // const postScore = async () => {
-  //   try {
-  //     const response = await fetch("http://localhost:8080/api/games/score", {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       credentials: "include",
-  //       body: JSON.stringify({
-  //         score: score,
-  //       }),
-  //     });
+  const postScore = async () => {
+    try {
+      const response = await fetch("http://localhost:8080/api/games/score", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          score: score,
+        }),
+      });
 
-  //     const result = await response.json();
-  //     if (response.ok) {
-  //       console.log("Score posted successfully:", result);
-  //     } else {
-  //       console.error("Failed to post score:", result.message);
-  //     }
-  //   } catch (error) {
-  //     console.error("Error posting score:", error);
-  //   }
-  // };
+      const result = await response.json();
+      if (response.ok) {
+        console.log("Score posted successfully:", result);
+      } else {
+        console.error("Failed to post score:", result.message);
+      }
+    } catch (error) {
+      console.error("Error posting score:", error);
+    }
+  };
 
   const restartQuiz = () => {
     setCurrentQuestion(0);

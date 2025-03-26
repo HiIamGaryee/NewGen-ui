@@ -298,7 +298,7 @@ Please provide:
         style={styles.input}
         value={workoutType}
         onChangeText={setWorkoutType}
-        placeholder="Strength / Cardio / Yoga"
+        placeholder="Strength / Cardio / Yoga / Skateboard"
       />
 
       <Text style={styles.label}>Mood Level</Text>

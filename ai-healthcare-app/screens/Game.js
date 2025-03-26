@@ -112,7 +112,7 @@ const Game = () => {
     <View style={styles.container}>
       <Text style={styles.title}>{t("game_title")}</Text>
       <Text style={styles.timer}>
-      {t("time_left")}: {Math.floor(timeLeft / 60)}:
+        {t("time_left")}: {Math.floor(timeLeft / 60)}:
         {String(timeLeft % 60).padStart(2, "0")}
       </Text>
 
@@ -121,7 +121,7 @@ const Game = () => {
       ) : showResult ? (
         <View style={styles.resultContainer}>
           <Text style={styles.resultText}>
-          {t("your_score")}: {score} / {questions.length} 🎉
+            {t("your_score")}: {score} / {questions.length} 🎉
           </Text>
           <TouchableOpacity style={styles.button} onPress={restartQuiz}>
             <Text style={styles.buttonText}>{t("play_again")}</Text>

@@ -17,7 +17,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Load environment variables from .env file
-dotenv.config();
+dotenv.config({ path: '.env.local' });
 
 const app = express();
 app.use(

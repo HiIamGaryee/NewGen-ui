@@ -2,6 +2,7 @@ import React from "react";
 import { View, Text, StyleSheet, ScrollView, Dimensions } from "react-native";
 import { LineChart, ProgressChart } from "react-native-chart-kit";
 import { useTranslation } from "react-i18next";
+import AiHealthReport from "../services/AiHealthReport";
 
 const screenWidth = Dimensions.get("window").width;
 
@@ -24,7 +25,15 @@ const Health = () => {
       <Text style={styles.chartTitle}>{t("heart_rate")}</Text>
       <LineChart
         data={{
-          labels: [t("mon"), t("tue"), t("wed"), t("thu"), t("fri"), t("sat"), t("sun")],
+          labels: [
+            t("mon"),
+            t("tue"),
+            t("wed"),
+            t("thu"),
+            t("fri"),
+            t("sat"),
+            t("sun"),
+          ],
           datasets: [{ data: healthData.heartRate }],
         }}
         width={screenWidth - 40}
@@ -39,7 +48,15 @@ const Health = () => {
       <Text style={styles.chartTitle}>{t("daily_steps")}</Text>
       <LineChart
         data={{
-          labels: [t("mon"), t("tue"), t("wed"), t("thu"), t("fri"), t("sat"), t("sun")],
+          labels: [
+            t("mon"),
+            t("tue"),
+            t("wed"),
+            t("thu"),
+            t("fri"),
+            t("sat"),
+            t("sun"),
+          ],
           datasets: [{ data: healthData.steps }],
         }}
         width={screenWidth - 40}
@@ -62,6 +79,7 @@ const Health = () => {
         hideLegend={false}
         style={styles.chart}
       />
+      <AiHealthReport />
     </ScrollView>
   );
 };
@@ -80,9 +98,24 @@ const chartConfig = {
 
 const styles = StyleSheet.create({
   container: { flex: 1, padding: 20, backgroundColor: "#f8f9fa" },
-  title: { fontSize: 24, fontWeight: "bold", textAlign: "center", marginBottom: 10 },
-  subtitle: { fontSize: 16, textAlign: "center", color: "#6c757d", marginBottom: 20 },
-  chartTitle: { fontSize: 18, fontWeight: "bold", marginTop: 20, marginBottom: 5 },
+  title: {
+    fontSize: 24,
+    fontWeight: "bold",
+    textAlign: "center",
+    marginBottom: 10,
+  },
+  subtitle: {
+    fontSize: 16,
+    textAlign: "center",
+    color: "#6c757d",
+    marginBottom: 20,
+  },
+  chartTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+    marginTop: 20,
+    marginBottom: 5,
+  },
   chart: { borderRadius: 16, alignSelf: "center" },
 });
 

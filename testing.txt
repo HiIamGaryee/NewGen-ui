@@ -10,3 +10,7 @@ run client
 2.npx expo start     
    -> and go to local host 5173
 3. press w on it 
+
+my mongo db user name
+# tgyandtpy
+# JTNMuiO4mFDljdB5

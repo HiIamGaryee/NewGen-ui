@@ -12,7 +12,7 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import { useTranslation } from "react-i18next";
 
-const genders = ["male", "female", "other"];
+const genders = ["male", "female"];
 
 const SignUp = () => {
   const navigation = useNavigation();
@@ -43,26 +43,28 @@ const SignUp = () => {
 
   const handleSignUp = async () => {
     if (!validateFields()) return;
-
+    
     const userData = {
       username,
       email,
       password,
       gender,
-      age: parseInt(age, 10),
+      age: parseInt(age), // Convert age to number
     };
 
     try {
       const response = await fetch("http://localhost:8080/api/auth/register", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify(userData),
       });
 
       const data = await response.json();
       if (response.ok) {
         Alert.alert(t("success"), t("registration_successful"));
-        navigation.replace("Dashboard");
+        navigation.replace("Dashboard"); // Navigate to Dashboard on success
       } else {
         Alert.alert(t("registration_failed"), data.message || t("something_wrong"));
       }
@@ -75,49 +77,55 @@ const SignUp = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>{t("sign_up")}</Text>
-      
+
       <TextInput
-        style={[styles.input, errors.username && styles.errorBorder]}
+        style={styles.input}
         placeholder={t("username")}
+        placeholderTextColor="#999"
         value={username}
         onChangeText={setUsername}
       />
       {errors.username && <Text style={styles.errorText}>{errors.username}</Text>}
       
       <TextInput
-        style={[styles.input, errors.email && styles.errorBorder]}
+        style={styles.input}
         placeholder={t("email")}
+        placeholderTextColor="#999"
         value={email}
         onChangeText={setEmail}
         keyboardType="email-address"
       />
       {errors.email && <Text style={styles.errorText}>{errors.email}</Text>}
-      
+
       <TextInput
-        style={[styles.input, errors.password && styles.errorBorder]}
+        style={styles.input}
         placeholder={t("password")}
+        placeholderTextColor="#999"
         value={password}
         onChangeText={setPassword}
         secureTextEntry
       />
       {errors.password && <Text style={styles.errorText}>{errors.password}</Text>}
-      
+
       <TextInput
-        style={[styles.input, errors.confirmPassword && styles.errorBorder]}
+        style={styles.input}
         placeholder={t("confirm_password")}
+        placeholderTextColor="#999"
         value={confirmPassword}
         onChangeText={setConfirmPassword}
         secureTextEntry
       />
       {errors.confirmPassword && <Text style={styles.errorText}>{errors.confirmPassword}</Text>}
-      
-      <TouchableOpacity style={[styles.input, errors.gender && styles.errorBorder]} onPress={() => setModalVisible(true)}>
+
+      {/* Gender Selection */}
+      <TouchableOpacity style={styles.input} onPress={() => setModalVisible(true)}>
         <Text style={gender ? styles.inputText : styles.placeholderText}>
           {gender ? t(gender.toLowerCase()) : t("select_gender")}
         </Text>
       </TouchableOpacity>
       {errors.gender && <Text style={styles.errorText}>{errors.gender}</Text>}
 
+      {/* Gender Selection Modal */}
       <Modal visible={modalVisible} transparent animationType="slide">
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
@@ -142,19 +150,27 @@ const SignUp = () => {
           </View>
         </View>
       </Modal>
-      
+
       <TextInput
-        style={[styles.input, errors.age && styles.errorBorder]}
+        style={styles.input}
         placeholder={t("age")}
+        placeholderTextColor="#999"
         value={age}
         onChangeText={setAge}
         keyboardType="numeric"
       />
       {errors.age && <Text style={styles.errorText}>{errors.age}</Text>}
-      
+
       <TouchableOpacity style={styles.button} onPress={handleSignUp}>
         <Text style={styles.buttonText}>{t("sign_up")}</Text>
       </TouchableOpacity>
+
+      <Text style={styles.loginText}>
+        {t("already_have_account")} {" "}
+        <Text style={styles.loginLink} onPress={() => navigation.navigate("Login")}>
+          {t("login")}
+        </Text>
+      </Text>
     </View>
   );
 };

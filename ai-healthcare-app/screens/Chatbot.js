@@ -10,10 +10,10 @@ import {
   Image,
 } from "react-native";
 
-
 const Chatbot = () => {
   const OPENAI_API_KEY =
     "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";
+  // replace with ur real api key
 
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
@@ -69,10 +69,7 @@ const Chatbot = () => {
 
   return (
     <View style={styles.container}>
-      <Image
-        source={require("../assets/robot.png")}
-        style={styles.logo}
-      />
+      <Image source={require("../assets/robot.png")} style={styles.logo} />
       <Text style={styles.title}>AI Health Assistant</Text>
       <FlatList
         data={messages}

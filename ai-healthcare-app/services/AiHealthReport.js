@@ -11,6 +11,7 @@ import {
 
 const API_KEY =
   "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";
+// replace with ur real api key
 
 const AiHealthReport = () => {
   const [weight, setWeight] = useState("");

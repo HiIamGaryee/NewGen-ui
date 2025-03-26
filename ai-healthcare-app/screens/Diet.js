@@ -16,7 +16,11 @@ const Diet = () => {
   const [selectedPreference, setSelectedPreference] = useState("Balanced");
   const [vegetables, setVegetables] = useState("");
   const [meats, setMeats] = useState("");
-  const [mealPlan, setMealPlan] = useState({ breakfast: "", lunch: "", dinner: "" });
+  const [mealPlan, setMealPlan] = useState({
+    breakfast: "",
+    lunch: "",
+    dinner: "",
+  });
   const [randomMeal, setRandomMeal] = useState(null);
 
   const mealSuggestions = {
@@ -40,7 +44,9 @@ const Diet = () => {
   // Fetch random meal from API
   const fetchRandomMeal = async () => {
     try {
-      const response = await fetch("https://www.themealdb.com/api/json/v1/1/random.php");
+      const response = await fetch(
+        "https://www.themealdb.com/api/json/v1/1/random.php"
+      );
       const data = await response.json();
       if (data.meals) {
         setRandomMeal(data.meals[0]);
@@ -96,7 +102,10 @@ const Diet = () => {
         onChangeText={setMeats}
       />
 
-      <TouchableOpacity style={styles.darkBlueButton} onPress={generateMealPlan}>
+      <TouchableOpacity
+        style={styles.darkBlueButton}
+        onPress={generateMealPlan}
+      >
         <Text style={styles.darkBlueButtonText}>{t("get_meal_plan")}</Text>
       </TouchableOpacity>
 
@@ -105,17 +114,30 @@ const Diet = () => {
           {mealPlan.breakfast && (
             <>
               <Text style={styles.mealTitle}>{t("daily_meal_plan")}</Text>
-              <Text style={styles.mealText}>{t("breakfast")}: {mealPlan.breakfast}</Text>
-              <Text style={styles.mealText}>{t("lunch")}: {mealPlan.lunch}</Text>
-              <Text style={styles.mealText}>{t("dinner")}: {mealPlan.dinner}</Text>
+              <Text style={styles.mealText}>
+                {t("breakfast")}: {mealPlan.breakfast}
+              </Text>
+              <Text style={styles.mealText}>
+                {t("lunch")}: {mealPlan.lunch}
+              </Text>
+              <Text style={styles.mealText}>
+                {t("dinner")}: {mealPlan.dinner}
+              </Text>
             </>
           )}
           {randomMeal && (
             <>
-              <Text style={styles.mealTitle}>{t("recommended_meal")}</Text> {/* 🏷️ wrap "Recommended Meal:" */}
+              <Text style={styles.mealTitle}>{t("recommended_meal")}</Text>{" "}
+              {/* 🏷️ wrap "Recommended Meal:" */}
               <Text style={styles.mealText}>🍽️ {randomMeal.strMeal}</Text>
-              <Text style={styles.mealText}>🌍 {t("origin")}: {randomMeal.strArea}</Text> {/* 🏷️ wrap "Origin" */}
-              <Text style={styles.mealText}>🥘 {t("category")}: {randomMeal.strCategory}</Text> {/* 🏷️ wrap "Category" */}
+              <Text style={styles.mealText}>
+                🌍 {t("origin")}: {randomMeal.strArea}
+              </Text>{" "}
+              {/* 🏷️ wrap "Origin" */}
+              <Text style={styles.mealText}>
+                🥘 {t("category")}: {randomMeal.strCategory}
+              </Text>{" "}
+              {/* 🏷️ wrap "Category" */}
             </>
           )}
         </View>
@@ -123,3 +145,5 @@ const Diet = () => {
     </ScrollView>
   );
 };
+
+export default Diet;

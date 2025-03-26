@@ -1,5 +1,5 @@
 import express from "express";
-// import Report from "../models/Report.js"; // The Mongoose model you showed
+import Report from "../models/Report.js"; // The Mongoose model you showed
 import User from "../models/User.js"; // Only if you want to verify the user exists
 
 const router = express.Router();

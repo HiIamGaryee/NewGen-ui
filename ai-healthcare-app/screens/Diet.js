@@ -146,4 +146,68 @@ const Diet = () => {
   );
 };
 
+const styles = StyleSheet.create({
+  container: { flex: 1, padding: 20, backgroundColor: "#f8f9fa" },
+  title: {
+    fontSize: 24,
+    fontWeight: "bold",
+    textAlign: "center",
+    marginBottom: 10,
+    color: "#000",
+  },
+  subtitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+    marginBottom: 8,
+    color: "#000",
+  },
+  optionsContainer: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    marginBottom: 15,
+  },
+  optionButton: {
+    padding: 10,
+    margin: 5,
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: "#007bff",
+    backgroundColor: "#fff",
+  },
+  selectedOption: { backgroundColor: "#007bff" },
+  optionText: { fontSize: 16, color: "#000" },
+  input: {
+    borderWidth: 1,
+    borderColor: "#ccc",
+    padding: 10,
+    borderRadius: 10,
+    marginBottom: 10,
+    backgroundColor: "#fff",
+    color: "#000",
+  },
+  darkBlueButton: {
+    marginTop: 20,
+    padding: 15,
+    backgroundColor: "#003366",
+    borderRadius: 10,
+    alignItems: "center",
+  },
+  darkBlueButtonText: { color: "#FFFFFF", fontSize: 18, fontWeight: "bold" },
+  mealContainer: {
+    marginTop: 20,
+    padding: 15,
+    backgroundColor: "#fff",
+    borderRadius: 10,
+    elevation: 3,
+  },
+  mealTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+    textAlign: "center",
+    marginBottom: 5,
+    color: "#000",
+  },
+  mealText: { fontSize: 16, marginVertical: 2, color: "#000" },
+});
+
 export default Diet;

@@ -39,6 +39,7 @@ const Login = () => {
       if (result.success) {
         Alert.alert(t("success"), t("login_success"));
         navigation.replace("Dashboard");
+        navigation.navigate("Dashboard");
       } else {
         setErrorMessage(result.message || t("invalid_credentials"));
         Alert.alert(t("login_failed"), result.message || t("invalid_credentials"));
@@ -47,7 +48,6 @@ const Login = () => {
       console.error("Login Error:", error);
       Alert.alert(t("login_error"), t("server_error"));
     }
-    navigation.navigate("Dashboard");
   };
 
 

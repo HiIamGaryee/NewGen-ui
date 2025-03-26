@@ -40,13 +40,15 @@ const UserProfile = () => {
       ) : profile ? (
         <View style={styles.profileCard}>
           <Text style={styles.profileTitle}>Hello, {profile.username}!</Text>
-          <Text style={styles.profileInfo}>📧 Email: {profile.email}</Text>
-          <Text style={styles.profileInfo}>👤 Username: {profile.username}</Text>
-          <Text style={styles.profileInfo}>⚧ Gender: {profile.gender}</Text>
-          <Text style={styles.profileInfo}>🎂 Age: {profile.age}</Text>
-          {profile.heartbeat && (
-            <Text style={styles.profileInfo}>❤️ Heartbeat: {profile.heartbeat} BPM</Text>
-          )}
+          <View style={styles.infoContainer}>
+            <Text style={styles.profileInfo}>📧 Email: {profile.email}</Text>
+            <Text style={styles.profileInfo}>👤 Username: {profile.username}</Text>
+            <Text style={styles.profileInfo}>⚧ Gender: {profile.gender}</Text>
+            <Text style={styles.profileInfo}>🎂 Age: {profile.age}</Text>
+            {profile.heartbeat && (
+              <Text style={styles.profileInfo}>❤️ Heartbeat: {profile.heartbeat} BPM</Text>
+            )}
+          </View>
         </View>
       ) : (
         <Text style={styles.errorText}>Failed to load profile.</Text>
@@ -64,48 +66,66 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     padding: 20,
-    backgroundColor: "#F8F9FA",
+    backgroundColor: "#F0F4F8",
   },
   profileCard: {
     backgroundColor: "#FFFFFF",
-    padding: 20,
+    padding: 25,
     borderRadius: 15,
     shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 5,
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.15,
+    shadowRadius: 6,
     elevation: 5,
-    width: "90%",
+    width: "85%",
     alignItems: "center",
+    marginBottom: 20,
   },
   profileTitle: {
     fontSize: 22,
     fontWeight: "bold",
     color: "#002147",
-    marginBottom: 10,
+    marginBottom: 15,
+    textAlign: "center",
+  },
+  infoContainer: {
+    width: "100%",
+    alignItems: "center",
+    backgroundColor: "#F8F9FA",
+    padding: 15,
+    borderRadius: 10,
   },
   profileInfo: {
     fontSize: 16,
     color: "#333",
-    marginBottom: 5,
+    marginBottom: 6,
+    textAlign: "left",
+    width: "100%",
   },
   errorText: {
     fontSize: 16,
     color: "red",
     marginBottom: 10,
+    textAlign: "center",
   },
   button: {
     backgroundColor: "#002147",
-    padding: 12,
-    borderRadius: 10,
-    marginTop: 20,
-    width: "90%",
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderRadius: 8,
+    width: "85%",
     alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 4,
   },
   buttonText: {
     color: "#FFFFFF",
     fontSize: 16,
     fontWeight: "bold",
+    letterSpacing: 0.5,
   },
 });
 

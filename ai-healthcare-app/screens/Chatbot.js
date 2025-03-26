@@ -7,8 +7,9 @@ import {
   FlatList,
   StyleSheet,
   Linking,
+  Image,
 } from "react-native";
-// import { OPENAI_API_KEY } from '@env'; // Import API key from .env
+
 
 const Chatbot = () => {
   const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
@@ -67,6 +68,10 @@ const Chatbot = () => {
 
   return (
     <View style={styles.container}>
+      <Image
+        source={require("../assets/robot.png")}
+        style={styles.logo}
+      />
       <Text style={styles.title}>AI Health Assistant</Text>
       <FlatList
         data={messages}
@@ -104,6 +109,12 @@ const Chatbot = () => {
 
 const styles = StyleSheet.create({
   container: { flex: 1, padding: 20, backgroundColor: "#f8f9fa" },
+  logo: {
+    width: 80,
+    height: 80,
+    alignSelf: "center",
+    marginBottom: 10,
+  },
   title: {
     fontSize: 24,
     fontWeight: "bold",

@@ -5,6 +5,7 @@ import {
   TextInput,
   TouchableOpacity,
   StyleSheet,
+  Modal,
 } from "react-native";
 import Svg, { Polyline } from "react-native-svg";
 import GoogleFit, { Scopes } from "react-native-google-fit";
@@ -19,12 +20,12 @@ const Dashboard = () => {
   const [height, setHeight] = useState("");
   const [bmi, setBmi] = useState(null);
   const [bmiCategory, setBmiCategory] = useState("");
-  const [heartbeat, setHeartbeat] = useState(67); // Default heart rate
+  const [heartbeat, setHeartbeat] = useState(67);
+  const [profileVisible, setProfileVisible] = useState(false);
 
-  // Simulate heartbeat changes every second
   useEffect(() => {
     const interval = setInterval(() => {
-      const newHeartbeat = Math.floor(Math.random() * (100 - 60 + 1)) + 60; // Random bpm between 60-100
+      const newHeartbeat = Math.floor(Math.random() * (100 - 60 + 1)) + 60;
       setHeartbeat(newHeartbeat);
     }, 1000);
 
@@ -57,37 +58,25 @@ const Dashboard = () => {
     setBmiCategory(category);
   };
 
-  const fetchHeartRate = () => {
-    const options = {
-      scopes: [
-        Scopes.FITNESS_ACTIVITY_READ,
-        Scopes.FITNESS_BODY_READ,
-        Scopes.FITNESS_HEART_RATE_READ,
-      ],
-    };
-
-    GoogleFit.authorize(options).then((authResult) => {
-      if (authResult.success) {
-        GoogleFit.getHeartRateSamples({
-          startDate: "2025-03-20T00:00:17.971Z", // ISO format
-          endDate: new Date().toISOString(),
-        }).then((res) => {
-          if (res.length > 0) {
-            setHeartbeat(res[res.length - 1].value);
-          }
-        });
-      } else {
-        console.log("Google Fit authorization failed");
-      }
-    });
-  };
-
   return (
     <View style={styles.container}>
       <Text style={styles.title}>{t("dashboard_title")}</Text>
-      <UserProfile />
+      
+      <TouchableOpacity style={styles.refreshButton} onPress={() => setProfileVisible(true)}>
+        <Text style={styles.refreshButtonText}>{t("refresh_profile")}</Text>
+      </TouchableOpacity>
 
-      {/* Heartbeat Graph */}
+      <Modal visible={profileVisible} transparent animationType="slide">
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <UserProfile />
+            <TouchableOpacity onPress={() => setProfileVisible(false)} style={styles.closeButton}>
+              <Text style={styles.closeButtonText}>{t("close")}</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+
       <Svg height="100" width="300" style={styles.heartbeatGraph}>
         <Polyline
           points="0,50 20,30 40,70 60,20 80,50 100,30 120,70 140,20 160,50"
@@ -99,7 +88,6 @@ const Dashboard = () => {
 
       <Text style={styles.heartbeatText}>{t("heartbeat")}: {heartbeat} bpm ❤️</Text>
 
-      {/* BMI Input Fields */}
       <TextInput
         style={styles.input}
         placeholder="Enter Age"
@@ -122,14 +110,8 @@ const Dashboard = () => {
         onChangeText={setHeight}
       />
 
-      {/* Calculate BMI Button */}
       <TouchableOpacity style={styles.button} onPress={calculateBMI}>
         <Text style={styles.buttonText}>{t("calculate_bmi")}</Text>
-      </TouchableOpacity>
-
-      {/* Test Button to Fetch Heart Rate */}
-      <TouchableOpacity style={styles.testButton} onPress={fetchHeartRate}>
-        <Text style={styles.testButtonText}>{t("test_heartbeat")}</Text>
       </TouchableOpacity>
 
       {bmi && (
@@ -143,49 +125,22 @@ const Dashboard = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 20,
-    alignItems: "center",
-    backgroundColor: "#fff",
-  },
+  container: { flex: 1, padding: 20, alignItems: "center", backgroundColor: "#fff" },
   title: { fontSize: 24, fontWeight: "bold", marginBottom: 20 },
+  refreshButton: { width: "60%", backgroundColor: "#002147", padding: 12, borderRadius: 8, alignItems: "center", marginBottom: 10 },
+  refreshButtonText: { color: "#fff", fontSize: 16, fontWeight: "bold" },
+  modalContainer: { flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: "rgba(0,0,0,0.5)" },
+  modalContent: { width: "80%", backgroundColor: "#fff", padding: 20, borderRadius: 10, alignItems: "center" },
+  closeButton: { marginTop: 10, backgroundColor: "#002147", padding: 10, borderRadius: 5 },
+  closeButtonText: { color: "#fff", fontSize: 16 },
   heartbeatGraph: { marginBottom: 10 },
   heartbeatText: { fontSize: 18, color: "red", marginBottom: 20 },
-  input: {
-    width: "80%",
-    height: 40,
-    borderColor: "gray",
-    borderWidth: 1,
-    marginBottom: 10,
-    paddingHorizontal: 10,
-  },
+  input: { width: "80%", height: 40, borderColor: "gray", borderWidth: 1, marginBottom: 10, paddingHorizontal: 10 },
   resultContainer: { marginTop: 10, alignItems: "center" },
   bmiText: { fontSize: 18, fontWeight: "bold", marginTop: 10 },
-  bmiCategory: {
-    fontSize: 18,
-    fontWeight: "bold",
-    marginTop: 5,
-    color: "#002147",
-  },
-  button: {
-    width: "60%",
-    backgroundColor: "#002147",
-    padding: 14,
-    borderRadius: 10,
-    alignItems: "center",
-    marginTop: 10,
-  },
+  bmiCategory: { fontSize: 18, fontWeight: "bold", marginTop: 5, color: "#002147" },
+  button: { width: "60%", backgroundColor: "#002147", padding: 14, borderRadius: 10, alignItems: "center", marginTop: 10 },
   buttonText: { color: "#fff", fontSize: 18, fontWeight: "bold" },
-  testButton: {
-    width: "40%",
-    backgroundColor: "#002147",
-    padding: 10,
-    borderRadius: 8,
-    alignItems: "center",
-    marginTop: 10,
-  },
-  testButtonText: { color: "#fff", fontSize: 16, fontWeight: "bold" },
 });
 
 export default Dashboard;

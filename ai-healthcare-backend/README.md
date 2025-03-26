@@ -1,74 +1,52 @@
-# NewGen Backend
+# AI Healthcare Backend
 
-This is the backend server for our AI-powered healthcare assistant. It receives health data (like weight, height, exercise, heartbeat) and stores it in a database. It also supports multiple languages using i18n for international users.
+Welcome to the **AI Healthcare Backend** repository. This server-side application powers the AI Healthcare system, managing user authentication, health data processing, and database integration.
 
-## How to Run This Project
+## 🧠 Overview
 
-1. Open your terminal or Git Bash
-2. Go to the backend folder:
+This backend is part of a full-stack AI-powered healthcare app. It manages:
+
+- Secure user registration and login
+- Health and wellness data endpoints
+- MongoDB data storage and validation
+- Session handling and cross-origin requests
+
+## ⚙️ Tech Stack
+
+- **Node.js** – Runtime
+- **Express.js** – Web framework
+- **MongoDB** – NoSQL database
+- **Mongoose** – ODM for MongoDB
+- **express-session** – Session management
+- **dotenv** – Environment variables
+- **bcryptjs** – Password hashing
+- **cors** – Cross-origin resource sharing
+
+## 📦 Prerequisites
+
+- Node.js v14+
+- MongoDB (local or Atlas)
+
+## 🛠 Installation
+
+Clone the repo and install dependencies:
 
 ```bash
-cd ai-healthcare-backend
-
-Install the necessary packages:
+git clone https://github.com/HiIamGaryee/NewGen-ui.git
+cd NewGen-ui/ai-healthcare-backend
 npm install
 
-Start the server:
-npm start
+🔐 Configuration
+Create a .env.local file inside the ai-healthcare-backend folder. Example content:
+MONGO_URI=mongodb://localhost:27017/ai-healthcare
+SESSION_SECRET=your_super_secret_key
+PORT=8080
 
-The server will run at:
+🚀 Running the Server
+node server.js
+
+The backend should now be running at:
 http://localhost:8080
 
-API Endpoints
-POST /api/health/record
-Save daily health data like:
-
-Exercise minutes
-Water intake
-Weight
-
-Request body example:
-{
-  "userId": "abc123",
-  "date": "2025-03-23",
-  "exerciseMinutes": 30,
-  "waterIntake": 1.5,
-  "weight": 55
-}
-
-GET /api/health/records/:userId
-Get all saved health records for one user.
-
-POST /api/health/metrics
-Save a user’s weight and height.
-
-Request body example:
-
-{
-  "userId": "abc123",
-  "weight": 54.5,
-  "height": 160
-}
-
-POST /api/health/heartbeat
-Save or update a user’s heartbeat.
-
-Request body example:
-
-{
-  "userId": "abc123",
-  "heartbeat": 78
-}
-
-Language Support (i18n)
-You can view translated messages by adding ?lang=xx to the URL.
-
-Supported languages:
-
-en → English (default)
-es → Spanish
-zh → Chinese
-
-Example:
-http://localhost:3000/api/health/metrics?lang=es
-```
+📄 License
+This project is open-source and available under the MIT License.

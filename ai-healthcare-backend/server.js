@@ -17,7 +17,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Load environment variables from .env file
-dotenv.config({ path: '.env.local' });
+dotenv.config();
 
 const app = express();
 app.use(
@@ -56,6 +56,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/games", gameRoutes);
 app.use("/api/diet", dietRoutes);
 app.use("/api/health", healthRoutes);
+// app.use("/api/report", reportRoutes);
 
 app.use((err, req, res, next) => {
   console.error(err.stack);

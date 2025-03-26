@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, TouchableOpacity, StyleSheet, Alert, ActivityIndicator } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  Alert,
+  ActivityIndicator,
+} from "react-native";
 
 const UserProfile = () => {
   const [profile, setProfile] = useState(null);
@@ -23,7 +30,10 @@ const UserProfile = () => {
       if (response.ok) {
         setProfile(data.user);
       } else {
-        Alert.alert("Profile Error", data.message || "Failed to fetch profile data.");
+        Alert.alert(
+          "Profile Error",
+          data.message || "Failed to fetch profile data."
+        );
       }
     } catch (error) {
       console.error("Fetch Profile Error:", error);
@@ -42,11 +52,15 @@ const UserProfile = () => {
           <Text style={styles.profileTitle}>Hello, {profile.username}!</Text>
           <View style={styles.infoContainer}>
             <Text style={styles.profileInfo}>📧 Email: {profile.email}</Text>
-            <Text style={styles.profileInfo}>👤 Username: {profile.username}</Text>
+            <Text style={styles.profileInfo}>
+              👤 Username: {profile.username}
+            </Text>
             <Text style={styles.profileInfo}>⚧ Gender: {profile.gender}</Text>
             <Text style={styles.profileInfo}>🎂 Age: {profile.age}</Text>
             {profile.heartbeat && (
-              <Text style={styles.profileInfo}>❤️ Heartbeat: {profile.heartbeat} BPM</Text>
+              <Text style={styles.profileInfo}>
+                ❤️ Heartbeat: {profile.heartbeat} BPM
+              </Text>
             )}
           </View>
         </View>
@@ -77,7 +91,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.15,
     shadowRadius: 6,
     elevation: 5,
-    width: "85%",
+    width: "auto",
     alignItems: "center",
     marginBottom: 20,
   },

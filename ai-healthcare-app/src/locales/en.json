@@ -53,8 +53,8 @@
   "exercise_minutes": "Exercise duration (minutes)",
   "water_intake": "Water intake (liters)",
   "weight": "Weight (kg)",
-  "weight_placeholder" : "Enter Weight (kg)",
-  "height_placeholder" : "Enter Height (cm)",
+  "weight_placeholder": "Enter Weight (kg)",
+  "height_placeholder": "Enter Height (cm)",
   "submit": "Submit",
   "health_data_saved": "Health data submitted successfully",
   "game_title": "Health & Medicine Quiz 🏥",
@@ -88,7 +88,7 @@
   "meal_category": "🥘 Category: {{category}}",
   "fetch_meal_error": "Failed to fetch meal recommendation.",
   "fetch_meal_api_error": "An error occurred while fetching meal data.",
-  "refresh_profile" : "Refresh Profile",
+  "refresh_profile": "Refresh Profile",
   "medicine_reminder": "💊 Medicine Reminder",
   "medicine_reminder_description": "Stay on track with your medication schedule!",
   "select_medicine": "Select Medicine",
@@ -96,6 +96,7 @@
   "medicine_placeholder": "Enter your medicine",
   "add_reminder": "➕ Add Reminder",
   "set_reminder_time": "Set Reminder Time",
-  "go_to_aichatbox": "Go to AI Assistant Chatbot"
-  
+  "go_to_aichatbox": "Go to AI Assistant Chatbot",
+  "dashboard_title": "Dashboard",
+  "Calculate Bmi": "Calcular BMI"
 }

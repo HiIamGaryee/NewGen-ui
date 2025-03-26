@@ -1,39 +1,46 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, FlatList, StyleSheet, Linking } from 'react-native';
+import { OPENAI_API_KEY } from '@env'; // Import API key from .env
 
-const Chatbot = ({ navigation }) => {
+const Chatbot = () => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
 
-  const medicalDatabase = [
-    { symptoms: ['fever', 'cough', 'tiredness'], diagnosis: "It appears you may have a common flu. Stay hydrated, rest well, and monitor your symptoms. If they worsen, consider seeing a doctor." },
-    { symptoms: ['chest pain', 'shortness of breath', 'dizziness'], diagnosis: "Your symptoms could indicate a serious heart condition. Please seek immediate medical attention. 🚨 Call 999 now: " },
-    { symptoms: ['headache', 'blurred vision', 'weakness'], diagnosis: "These could be signs of high blood pressure or a neurological issue. It is best to consult a healthcare professional soon." },
-    { symptoms: ['abdominal pain', 'nausea', 'vomiting'], diagnosis: "This could be related to food poisoning or digestive issues. Stay hydrated and rest. If symptoms persist, seek medical advice." },
-    { symptoms: ['skin rash', 'itching', 'swelling'], diagnosis: "This may be an allergic reaction. Avoid potential allergens and take antihistamines if necessary. Seek medical help if symptoms worsen." },
-  ];
+  const fetchAIResponse = async (userInput) => {
+    try {
+      const response = await fetch('https://api.openai.com/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${OPENAI_API_KEY}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          model: 'gpt-3.5-turbo',
+          messages: [
+            { role: 'system', content: 'You are a medical AI assistant.' },
+            { role: 'user', content: userInput }
+          ],
+          max_tokens: 150,
+        }),
+      });
 
-  const analyzeSymptoms = (userInput) => {
-    const lowerCaseInput = userInput.toLowerCase();
-    for (const condition of medicalDatabase) {
-      if (condition.symptoms.some(symptom => lowerCaseInput.includes(symptom))) {
-        return condition.diagnosis;
-      }
+      const data = await response.json();
+      return data.choices?.[0]?.message?.content || "I'm sorry, I couldn't process your request.";
+    } catch (error) {
+      console.error('Error fetching AI response:', error);
+      return "Network error. Please try again.";
     }
-    return "I'm unable to provide an exact diagnosis based on the given symptoms. I strongly recommend consulting a healthcare professional for a more precise assessment.";
   };
 
-  const handleSend = () => {
-    if (input.trim() === '') return;
+  const handleSend = async () => {
+    if (!input.trim()) return;
 
     const newMessages = [...messages, { text: input, sender: 'user' }];
     setMessages(newMessages);
     setInput('');
 
-    setTimeout(() => {
-      const response = analyzeSymptoms(input);
-      setMessages([...newMessages, { text: response, sender: 'bot' }]);
-    }, 1000);
+    const response = await fetchAIResponse(input);
+    setMessages([...newMessages, { text: response, sender: 'bot' }]);
   };
 
   const handleEmergencyCall = (message) => {
@@ -47,7 +54,7 @@ const Chatbot = ({ navigation }) => {
       <Text style={styles.title}>AI Health Assistant</Text>
       <FlatList
         data={messages}
-        keyExtractor={(item, index) => index.toString()}
+        keyExtractor={(_, index) => index.toString()}
         renderItem={({ item }) => (
           <TouchableOpacity 
             onPress={() => handleEmergencyCall(item.text)} 

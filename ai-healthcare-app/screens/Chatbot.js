@@ -11,7 +11,7 @@ import {
 } from "react-native";
 
 const Chatbot = () => {
-  const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
+  const API_KEY = process.env.EXPO_PUBLIC_OPENAI_API_KEY;
 
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
@@ -23,7 +23,7 @@ const Chatbot = () => {
         {
           method: "POST",
           headers: {
-            Authorization: `Bearer ${OPENAI_API_KEY}`,
+            Authorization: `Bearer ${API_KEY}`,
             "Content-Type": "application/json",
           },
           body: JSON.stringify({

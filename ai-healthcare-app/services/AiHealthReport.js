@@ -9,9 +9,9 @@ import {
   Alert,
 } from "react-native";
 
-const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
-
 const AiHealthReport = () => {
+  const API_KEY = process.env.EXPO_PUBLIC_OPENAI_API_KEY;
+
   const [weight, setWeight] = useState("");
   const [height, setHeight] = useState("");
   const [bodyTemperature, setBodyTemperature] = useState("");
@@ -75,7 +75,7 @@ Please provide:
         {
           method: "POST",
           headers: {
-            Authorization: `Bearer ${OPENAI_API_KEY}`,
+            Authorization: `Bearer ${API_KEY}`,
             "Content-Type": "application/json",
           },
           body: JSON.stringify({

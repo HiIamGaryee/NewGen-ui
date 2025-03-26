@@ -5,7 +5,7 @@ import * as Localization from 'expo-localization';
 import en from './locales/en.json';
 import es from './locales/es.json';
 import zh from './locales/zh.json';
-import ms from './locales/ms.json'; // 🇲🇾 Malay
+import ms from './locales/ms.json'; 
 
 i18n
   .use(initReactI18next)

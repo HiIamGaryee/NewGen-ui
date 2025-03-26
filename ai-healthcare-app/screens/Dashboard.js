@@ -9,8 +9,11 @@ import {
 import Svg, { Polyline } from "react-native-svg";
 import GoogleFit, { Scopes } from "react-native-google-fit";
 import UserProfile from "../services/UserProfile";
+import { useTranslation } from "react-i18next";
 
 const Dashboard = () => {
+  const { t } = useTranslation();
+
   const [age, setAge] = useState("");
   const [weight, setWeight] = useState("");
   const [height, setHeight] = useState("");
@@ -43,13 +46,13 @@ const Dashboard = () => {
   const determineBMICategory = (bmi) => {
     let category = "";
     if (bmi < 18.5) {
-      category = "Underweight 😕";
+      category = t("underweight");
     } else if (bmi >= 18.5 && bmi < 24.9) {
-      category = "Healthy Weight ✅";
+      category = t("healthy");
     } else if (bmi >= 25 && bmi < 29.9) {
-      category = "Overweight ⚠️";
+      category = t("overweight");
     } else {
-      category = "Obese ❌";
+      category = t("obese");
     }
     setBmiCategory(category);
   };
@@ -81,7 +84,7 @@ const Dashboard = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Health Dashboard</Text>
+      <Text style={styles.title}>{t("dashboard_title")}</Text>
       <UserProfile />
 
       {/* Heartbeat Graph */}
@@ -94,7 +97,7 @@ const Dashboard = () => {
         />
       </Svg>
 
-      <Text style={styles.heartbeatText}>Heartbeat: {heartbeat} bpm ❤️</Text>
+      <Text style={styles.heartbeatText}>{t("heartbeat")}: {heartbeat} bpm ❤️</Text>
 
       {/* BMI Input Fields */}
       <TextInput
@@ -121,17 +124,17 @@ const Dashboard = () => {
 
       {/* Calculate BMI Button */}
       <TouchableOpacity style={styles.button} onPress={calculateBMI}>
-        <Text style={styles.buttonText}>Calculate BMI</Text>
+        <Text style={styles.buttonText}>{t("calculate_bmi")}</Text>
       </TouchableOpacity>
 
       {/* Test Button to Fetch Heart Rate */}
       <TouchableOpacity style={styles.testButton} onPress={fetchHeartRate}>
-        <Text style={styles.testButtonText}>Test Heartbeat</Text>
+        <Text style={styles.testButtonText}>{t("test_heartbeat")}</Text>
       </TouchableOpacity>
 
       {bmi && (
         <View style={styles.resultContainer}>
-          <Text style={styles.bmiText}>Your BMI: {bmi}</Text>
+          <Text style={styles.bmiText}>{t("your_bmi")}: {bmi}</Text>
           <Text style={styles.bmiCategory}>{bmiCategory}</Text>
         </View>
       )}

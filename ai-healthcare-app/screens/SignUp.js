@@ -43,7 +43,7 @@ const SignUp = () => {
 
   const handleSignUp = async () => {
     if (!validateFields()) return;
-    
+
     const userData = {
       username,
       email,
@@ -66,7 +66,10 @@ const SignUp = () => {
         Alert.alert("success", t("registration_successful"));
         navigation.replace("Dashboard"); // Navigate to Dashboard on success
       } else {
-        Alert.alert("registration_failed", data.message || t("something_wrong"));
+        Alert.alert(
+          t("registration_failed"),
+          data.message || t("something_wrong")
+        );
       }
     } catch (error) {
       console.error("Error:", error);
@@ -85,8 +88,10 @@ const SignUp = () => {
         value={username}
         onChangeText={setUsername}
       />
-      {errors.username && <Text style={styles.errorText}>{errors.username}</Text>}
-      
+      {errors.username && (
+        <Text style={styles.errorText}>{errors.username}</Text>
+      )}
+
       <TextInput
         style={styles.input}
         placeholder={t("email")}
@@ -105,7 +110,9 @@ const SignUp = () => {
         onChangeText={setPassword}
         secureTextEntry
       />
-      {errors.password && <Text style={styles.errorText}>{errors.password}</Text>}
+      {errors.password && (
+        <Text style={styles.errorText}>{errors.password}</Text>
+      )}
 
       <TextInput
         style={styles.input}
@@ -115,10 +122,15 @@ const SignUp = () => {
         onChangeText={setConfirmPassword}
         secureTextEntry
       />
-      {errors.confirmPassword && <Text style={styles.errorText}>{errors.confirmPassword}</Text>}
+      {errors.confirmPassword && (
+        <Text style={styles.errorText}>{errors.confirmPassword}</Text>
+      )}
 
       {/* Gender Selection */}
-      <TouchableOpacity style={styles.input} onPress={() => setModalVisible(true)}>
+      <TouchableOpacity
+        style={styles.input}
+        onPress={() => setModalVisible(true)}
+      >
         <Text style={gender ? styles.inputText : styles.placeholderText}>
           {gender ? t(gender.toLowerCase()) : t("select_gender")}
         </Text>
@@ -166,8 +178,11 @@ const SignUp = () => {
       </TouchableOpacity>
 
       <Text style={styles.loginText}>
-        {t("already_have_account")} {" "}
-        <Text style={styles.loginLink} onPress={() => navigation.navigate("Login")}>
+        {t("already_have_account")}{" "}
+        <Text
+          style={styles.loginLink}
+          onPress={() => navigation.navigate("Login")}
+        >
           {t("login")}
         </Text>
       </Text>
@@ -258,6 +273,12 @@ const styles = StyleSheet.create({
     color: "red",
     fontSize: 16,
     marginTop: 10,
+  },
+  errorText: {
+    color: "#ff0000",
+    fontSize: 14,
+    marginTop: 5,
+    marginBottom: 5,
   },
 });
 

@@ -37,10 +37,8 @@ cd NewGen-ui/ai-healthcare-backend
 npm install
 
 🔐 Configuration
-Create a .env.local file inside the ai-healthcare-backend folder. Example content:
-MONGO_URI=mongodb://localhost:27017/ai-healthcare
-SESSION_SECRET=your_super_secret_key
-PORT=8080
+Create a .env file inside the ai-healthcare-backend folder.
+Example content refer .env.local
 
 🚀 Running the Server
 node server.js
@@ -50,3 +48,4 @@ http://localhost:8080
 
 📄 License
 This project is open-source and available under the MIT License.
+```

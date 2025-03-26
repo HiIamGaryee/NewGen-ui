@@ -5,12 +5,13 @@ import {
   StyleSheet,
   TouchableOpacity,
   ActivityIndicator,
+  FlatList,
 } from "react-native";
+import { MaterialIcons } from "@expo/vector-icons";
 import he from "he";
 import { useTranslation } from "react-i18next";
 
-const API_URL =
-  "https://the-trivia-api.com/api/questions?categories=science&limit=10&tags=health";
+const API_URL = "https://the-trivia-api.com/api/questions?categories=science&limit=10&tags=health";
 
 const Game = () => {
   const { t } = useTranslation();
@@ -18,10 +19,28 @@ const Game = () => {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [score, setScore] = useState(0);
   const [showResult, setShowResult] = useState(false);
-  const [timeLeft, setTimeLeft] = useState(300); // 5 minutes
+  const [timeLeft, setTimeLeft] = useState(300);
   const [loading, setLoading] = useState(true);
+  const [scoreList, setScoreList] = useState([]);
+  const [showHistory, setShowHistory] = useState(false);
 
   useEffect(() => {
+    fetchQuestions();
+  }, []);
+
+  useEffect(() => {
+    if (timeLeft > 0 && !showResult) {
+      const timer = setInterval(() => {
+        setTimeLeft((prevTime) => prevTime - 1);
+      }, 1000);
+      return () => clearInterval(timer);
+    } else if (timeLeft === 0) {
+      setShowResult(true);
+    }
+  }, [timeLeft, showResult]);
+
+  const fetchQuestions = () => {
+    setLoading(true);
     fetch(API_URL)
       .then((response) => response.json())
       .then((data) => {
@@ -37,18 +56,7 @@ const Game = () => {
         setLoading(false);
       })
       .catch((error) => console.error("Error fetching quiz questions:", error));
-  }, []);
-
-  useEffect(() => {
-    if (timeLeft > 0 && !showResult) {
-      const timer = setInterval(() => {
-        setTimeLeft((prevTime) => prevTime - 1);
-      }, 1000);
-      return () => clearInterval(timer);
-    } else if (timeLeft === 0) {
-      setShowResult(true);
-    }
-  }, [timeLeft, showResult]);
+  };
 
   const handleAnswer = (selectedOption) => {
     if (selectedOption === questions[currentQuestion].answer) {
@@ -58,32 +66,13 @@ const Game = () => {
       setCurrentQuestion((prevQuestion) => prevQuestion + 1);
     } else {
       setShowResult(true);
-      postScore();
+      saveScore();
     }
   };
 
-  const postScore = async () => {
-    try {
-      const response = await fetch("http://localhost:8080/api/games/score", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-        body: JSON.stringify({
-          score: score,
-        }),
-      });
-
-      const result = await response.json();
-      if (response.ok) {
-        console.log("Score posted successfully:", result);
-      } else {
-        console.error("Failed to post score:", result.message);
-      }
-    } catch (error) {
-      console.error("Error posting score:", error);
-    }
+  const saveScore = () => {
+    const newScore = { score, date: new Date().toLocaleString() };
+    setScoreList((prevScores) => [newScore, ...prevScores].slice(0, 5));
   };
 
   const restartQuiz = () => {
@@ -91,53 +80,42 @@ const Game = () => {
     setScore(0);
     setTimeLeft(300);
     setShowResult(false);
-    setLoading(true);
-    fetch(API_URL)
-      .then((response) => response.json())
-      .then((data) => {
-        const formattedQuestions = data.map((question) => ({
-          question: he.decode(question.question),
-          options: [
-            ...question.incorrectAnswers.map((answer) => he.decode(answer)),
-            he.decode(question.correctAnswer),
-          ].sort(() => Math.random() - 0.5),
-          answer: he.decode(question.correctAnswer),
-        }));
-        setQuestions(formattedQuestions);
-        setLoading(false);
-      });
+    fetchQuestions();
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>{t("game_title")}</Text>
-      <Text style={styles.timer}>
-        {t("time_left")}: {Math.floor(timeLeft / 60)}:
-        {String(timeLeft % 60).padStart(2, "0")}
-      </Text>
-
-      {loading ? (
+      <View style={styles.header}>
+        <Text style={styles.title}>{t("game_title")}</Text>
+        <TouchableOpacity onPress={() => setShowHistory(!showHistory)}>
+        <MaterialIcons name="history" size={28} color="#003366" />
+        </TouchableOpacity>
+      </View>
+      
+      {showHistory ? (
+        <FlatList
+          data={scoreList}
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={({ item }) => (
+            <Text style={styles.scoreItem}>
+              {t("score")}: {item.score} - {item.date}
+            </Text>
+          )}
+        />
+      ) : loading ? (
         <ActivityIndicator size="large" color="#003366" />
       ) : showResult ? (
         <View style={styles.resultContainer}>
-          <Text style={styles.resultText}>
-            {t("your_score")}: {score} / {questions.length} 🎉
-          </Text>
+          <Text style={styles.resultText}>{t("your_score")}: {score} / {questions.length} 🎉</Text>
           <TouchableOpacity style={styles.button} onPress={restartQuiz}>
             <Text style={styles.buttonText}>{t("play_again")}</Text>
           </TouchableOpacity>
         </View>
       ) : (
         <View style={styles.quizContainer}>
-          <Text style={styles.question}>
-            {questions[currentQuestion].question}
-          </Text>
+          <Text style={styles.question}>{questions[currentQuestion].question}</Text>
           {questions[currentQuestion].options.map((option, index) => (
-            <TouchableOpacity
-              key={index}
-              style={styles.optionButton}
-              onPress={() => handleAnswer(option)}
-            >
+            <TouchableOpacity key={index} style={styles.optionButton} onPress={() => handleAnswer(option)}>
               <Text style={styles.optionText}>{option}</Text>
             </TouchableOpacity>
           ))}
@@ -155,12 +133,17 @@ const styles = StyleSheet.create({
     backgroundColor: "#f8f9fa",
     padding: 20,
   },
-  title: { fontSize: 24, fontWeight: "bold", marginBottom: 20, color: "#000" },
-  timer: {
-    fontSize: 18,
+  header: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    width: "100%",
+    marginBottom: 10,
+  },
+  title: {
+    fontSize: 24,
     fontWeight: "bold",
-    color: "#d9534f",
-    marginBottom: 15,
+    color: "#000",
   },
   quizContainer: { alignItems: "center", width: "100%" },
   question: {
@@ -193,6 +176,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   buttonText: { color: "#FFFFFF", fontSize: 18, fontWeight: "bold" },
+  scoreItem: { fontSize: 16, marginTop: 5, color: "#000" },
 });
 
 export default Game;

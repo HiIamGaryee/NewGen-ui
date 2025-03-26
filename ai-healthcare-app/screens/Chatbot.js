@@ -1,33 +1,49 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, FlatList, StyleSheet, Linking } from 'react-native';
-import { OPENAI_API_KEY } from '@env'; // Import API key from .env
+import React, { useState } from "react";
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  FlatList,
+  StyleSheet,
+  Linking,
+} from "react-native";
+// import { OPENAI_API_KEY } from '@env'; // Import API key from .env
 
 const Chatbot = () => {
+  const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
+
   const [messages, setMessages] = useState([]);
-  const [input, setInput] = useState('');
+  const [input, setInput] = useState("");
 
   const fetchAIResponse = async (userInput) => {
     try {
-      const response = await fetch('https://api.openai.com/v1/chat/completions', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${OPENAI_API_KEY}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          model: 'gpt-3.5-turbo',
-          messages: [
-            { role: 'system', content: 'You are a medical AI assistant.' },
-            { role: 'user', content: userInput }
-          ],
-          max_tokens: 150,
-        }),
-      });
+      const response = await fetch(
+        "https://api.openai.com/v1/chat/completions",
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${OPENAI_API_KEY}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            model: "gpt-3.5-turbo",
+            messages: [
+              { role: "system", content: "You are a medical AI assistant." },
+              { role: "user", content: userInput },
+            ],
+            max_tokens: 150,
+          }),
+        }
+      );
 
       const data = await response.json();
-      return data.choices?.[0]?.message?.content || "I'm sorry, I couldn't process your request.";
+      return (
+        data.choices?.[0]?.message?.content ||
+        "I'm sorry, I couldn't process your request."
+      );
     } catch (error) {
-      console.error('Error fetching AI response:', error);
+      console.error("Error fetching AI response:", error);
       return "Network error. Please try again.";
     }
   };
@@ -35,17 +51,17 @@ const Chatbot = () => {
   const handleSend = async () => {
     if (!input.trim()) return;
 
-    const newMessages = [...messages, { text: input, sender: 'user' }];
+    const newMessages = [...messages, { text: input, sender: "user" }];
     setMessages(newMessages);
-    setInput('');
+    setInput("");
 
     const response = await fetchAIResponse(input);
-    setMessages([...newMessages, { text: response, sender: 'bot' }]);
+    setMessages([...newMessages, { text: response, sender: "bot" }]);
   };
 
   const handleEmergencyCall = (message) => {
     if (message.includes("Call 999 now")) {
-      Linking.openURL('tel:999');
+      Linking.openURL("tel:999");
     }
   };
 
@@ -56,11 +72,16 @@ const Chatbot = () => {
         data={messages}
         keyExtractor={(_, index) => index.toString()}
         renderItem={({ item }) => (
-          <TouchableOpacity 
-            onPress={() => handleEmergencyCall(item.text)} 
+          <TouchableOpacity
+            onPress={() => handleEmergencyCall(item.text)}
             activeOpacity={item.text.includes("Call 999 now") ? 0.6 : 1}
           >
-            <View style={[styles.messageBubble, item.sender === 'user' ? styles.userBubble : styles.botBubble]}>
+            <View
+              style={[
+                styles.messageBubble,
+                item.sender === "user" ? styles.userBubble : styles.botBubble,
+              ]}
+            >
               <Text style={styles.messageText}>{item.text}</Text>
             </View>
           </TouchableOpacity>
@@ -82,16 +103,39 @@ const Chatbot = () => {
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 20, backgroundColor: '#f8f9fa' },
-  title: { fontSize: 24, fontWeight: 'bold', textAlign: 'center', marginBottom: 10, color: '#333' },
-  inputContainer: { flexDirection: 'row', alignItems: 'center', marginTop: 10 },
-  input: { flex: 1, borderWidth: 1, borderColor: '#ccc', borderRadius: 5, padding: 10, backgroundColor: '#fff' },
-  sendButton: { marginLeft: 10, backgroundColor: '#007bff', padding: 10, borderRadius: 5 },
-  sendButtonText: { color: '#fff', fontWeight: 'bold' },
-  messageBubble: { padding: 12, borderRadius: 10, marginVertical: 5, maxWidth: '80%' },
-  userBubble: { backgroundColor: '#007bff', alignSelf: 'flex-end' },
-  botBubble: { backgroundColor: '#e9ecef', alignSelf: 'flex-start' },
-  messageText: { color: '#000', fontSize: 16 },
+  container: { flex: 1, padding: 20, backgroundColor: "#f8f9fa" },
+  title: {
+    fontSize: 24,
+    fontWeight: "bold",
+    textAlign: "center",
+    marginBottom: 10,
+    color: "#333",
+  },
+  inputContainer: { flexDirection: "row", alignItems: "center", marginTop: 10 },
+  input: {
+    flex: 1,
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 5,
+    padding: 10,
+    backgroundColor: "#fff",
+  },
+  sendButton: {
+    marginLeft: 10,
+    backgroundColor: "#007bff",
+    padding: 10,
+    borderRadius: 5,
+  },
+  sendButtonText: { color: "#fff", fontWeight: "bold" },
+  messageBubble: {
+    padding: 12,
+    borderRadius: 10,
+    marginVertical: 5,
+    maxWidth: "80%",
+  },
+  userBubble: { backgroundColor: "#007bff", alignSelf: "flex-end" },
+  botBubble: { backgroundColor: "#e9ecef", alignSelf: "flex-start" },
+  messageText: { color: "#000", fontSize: 16 },
 });
 
 export default Chatbot;

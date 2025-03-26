@@ -11,7 +11,7 @@ import {
 } from "react-native";
 
 const Chatbot = () => {
-  const API_KEY = process.env.EXPO_PUBLIC_OPENAI_API_KEY;
+  const API_KEY = process.env.EXPO_PUBLIC_API_KEY;
 
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");

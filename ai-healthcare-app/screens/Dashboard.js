@@ -111,7 +111,7 @@ const Dashboard = () => {
       />
 
       <TouchableOpacity style={styles.button} onPress={calculateBMI}>
-        <Text style={styles.buttonText}>{t("calculate_bmi")}</Text>
+        <Text style={styles.buttonText}>{t("Calculate_BMI")}</Text>
       </TouchableOpacity>
 
       {bmi && (

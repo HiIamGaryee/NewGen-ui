@@ -1,121 +1,122 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet, TouchableOpacity, TextInput, FlatList } from "react-native";
-import DateTimePicker from "@react-native-community/datetimepicker";
-import { Ionicons } from "@expo/vector-icons";
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from "react-native";
+import { useTranslation } from "react-i18next"; 
 
-const Health = ({ navigation }) => {
-  const availableMedicines = ["Vitamin C", "Multivitamin", "Calcium", "Omega-3", "Other"];
-  const [selectedMedicine, setSelectedMedicine] = useState("");
-  const [customMedicine, setCustomMedicine] = useState("");
-  const [reminderTime, setReminderTime] = useState(new Date());
-  const [medicineData, setMedicineData] = useState([]);
-  const [showTimePicker, setShowTimePicker] = useState(false);
+const Health = () => {
+  const { t } = useTranslation(); 
 
-  const onTimeChange = (event, selectedDate) => {
-    if (selectedDate) {
-      setReminderTime(selectedDate);
+  const [exerciseMinutes, setExerciseMinutes] = useState("");
+  const [waterIntake, setWaterIntake] = useState("");
+  const [weight, setWeight] = useState("");
+
+  const handleSubmit = async () => {
+    if (!exerciseMinutes || !waterIntake || !weight) {
+      Alert.alert(t("error"), t("fill_all_fields")); 
+      return;
     }
-    setShowTimePicker(false);
-  };
 
-  const addReminder = () => {
-    const medicineName = selectedMedicine === "Other" ? customMedicine : selectedMedicine;
-    if (!medicineName) return;
-    const newReminder = {
-      name: medicineName,
-      time: reminderTime.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
-    };
-    setMedicineData([...medicineData, newReminder]);
-    setSelectedMedicine("");
-    setCustomMedicine("");
-    setReminderTime(new Date());
+    try {
+      const response = await fetch("http://localhost:8080/api/health/record", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userId: "abc123", // For demo purposes
+          date: new Date().toISOString(),
+          exerciseMinutes: parseInt(exerciseMinutes),
+          waterIntake: parseFloat(waterIntake),
+          weight: parseFloat(weight),
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        Alert.alert(t("success"), t("health_data_saved")); 
+      } else {
+        Alert.alert(t("error"), data.message || t("something_wrong")); 
+      }
+    } catch (error) {
+      console.error("Submission Error:", error);
+      Alert.alert(t("error"), t("server_error")); 
+    }
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>💊 Medicine Reminder</Text>
-      <Text style={styles.subtitle}>Stay on track with your medication schedule!</Text>
+      <Text style={styles.title}>{t("health_input_title")}</Text> 
 
-      <Text style={styles.selectLabel}>Select Medicine</Text>
-      <View style={styles.medicineInputContainer}>
-        <TextInput
-          style={styles.input}
-          placeholder="Choose your medicine"
-          value={selectedMedicine}
-          onFocus={() => setSelectedMedicine("")}
-        />
-      </View>
-      <View style={styles.medicineList}>
-        {availableMedicines.map((medicine, index) => (
-          <TouchableOpacity
-            key={index}
-            style={[styles.medicineOption, selectedMedicine === medicine && styles.selectedMedicine]}
-            onPress={() => setSelectedMedicine(medicine)}
-          >
-            <Text style={styles.medicineText}>{medicine}</Text>
-          </TouchableOpacity>
-        ))}
-      </View>
-      {selectedMedicine === "Other" && (
-        <TextInput
-          style={[styles.input, { marginTop: 10 }]}
-          placeholder="Enter your medicine"
-          value={customMedicine}
-          onChangeText={setCustomMedicine}
-        />
-      )}
-
-      <Text style={styles.selectLabel}>Set Reminder Time</Text>
-      <TouchableOpacity style={styles.timeButton} onPress={() => setShowTimePicker(true)}>
-        <Ionicons name="time-outline" size={20} color="#fff" />
-        <Text style={styles.timeButtonText}>{reminderTime.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}</Text>
-      </TouchableOpacity>
-      {showTimePicker && (
-        <DateTimePicker mode="time" display="clock" value={reminderTime} onChange={onTimeChange} />
-      )}
-
-      <TouchableOpacity style={styles.addButton} onPress={addReminder}>
-        <Text style={styles.addButtonText}>➕ Add Reminder</Text>
-      </TouchableOpacity>
-
-      <FlatList
-        data={medicineData}
-        keyExtractor={(item, index) => index.toString()}
-        renderItem={({ item }) => (
-          <View style={styles.medicineItem}>
-            <Text style={styles.medicineName}>{item.name}</Text>
-            <Text style={styles.medicineTime}>{item.time}</Text>
-          </View>
-        )}
+      <TextInput
+        style={styles.input}
+        placeholder={t("exercise_minutes")} 
+        placeholderTextColor="#999"
+        value={exerciseMinutes}
+        onChangeText={setExerciseMinutes}
+        keyboardType="numeric"
+      />
+      <TextInput
+        style={styles.input}
+        placeholder={t("water_intake")} 
+        placeholderTextColor="#999"
+        value={waterIntake}
+        onChangeText={setWaterIntake}
+        keyboardType="numeric"
+      />
+      <TextInput
+        style={styles.input}
+        placeholder={t("weight")} 
+        placeholderTextColor="#999"
+        value={weight}
+        onChangeText={setWeight}
+        keyboardType="numeric"
       />
 
-      <TouchableOpacity style={styles.chatbotButton} onPress={() => navigation.navigate("Chatbot")}>
-        <Text style={styles.chatbotButtonText}>Go to AI Assistant Chatbot</Text>
+      <TouchableOpacity style={styles.button} onPress={handleSubmit}>
+        <Text style={styles.buttonText}>{t("submit")}</Text> 
       </TouchableOpacity>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 20, backgroundColor: "#f0f4f8" },
-  title: { fontSize: 26, fontWeight: "bold", textAlign: "center", marginBottom: 10, color: "#2c3e50" },
-  subtitle: { fontSize: 16, textAlign: "center", color: "#7f8c8d", marginBottom: 20 },
-  selectLabel: { fontSize: 16, fontWeight: "bold", marginVertical: 10, color: "#34495e" },
-  input: { flex: 1, padding: 10, borderWidth: 1, borderColor: "#007AFF", borderRadius: 5, backgroundColor: "#fff" },
-  medicineInputContainer: { flexDirection: "row", alignItems: "center", marginBottom: 10 },
-  medicineList: { flexDirection: "row", flexWrap: "wrap", gap: 10 },
-  medicineOption: { padding: 10, borderRadius: 5, backgroundColor: "#ecf0f1" },
-  selectedMedicine: { backgroundColor: "#007AFF" },
-  medicineText: { color: "#2c3e50" },
-  timeButton: { flexDirection: "row", alignItems: "center", justifyContent: "center", backgroundColor: "#007AFF", padding: 10, borderRadius: 5, marginBottom: 20 },
-  timeButtonText: { color: "#fff", fontSize: 16, marginLeft: 10 },
-  addButton: { backgroundColor: "#28a745", padding: 15, borderRadius: 5, alignItems: "center" },
-  addButtonText: { color: "#fff", fontSize: 16, fontWeight: "bold" },
-  medicineItem: { padding: 15, backgroundColor: "#ffffff", borderRadius: 10, shadowOpacity: 0.1, elevation: 3, marginBottom: 10 },
-  medicineName: { fontSize: 18, fontWeight: "bold", color: "#007AFF" },
-  medicineTime: { fontSize: 16, color: "#6c757d" },
-  chatbotButton: { backgroundColor: "#003366", padding: 10, borderRadius: 5, marginTop: 20 },
-  chatbotButtonText: { color: "#fff", fontSize: 16, textAlign: "center" },
+  container: {
+    flex: 1,
+    backgroundColor: "#FFFFFF",
+    justifyContent: "center",
+    alignItems: "center",
+    paddingHorizontal: 20,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: "bold",
+    marginBottom: 20,
+    color: "#002147",
+  },
+  input: {
+    width: "100%",
+    backgroundColor: "#F0F0F0",
+    color: "#333",
+    borderRadius: 10,
+    padding: 12,
+    fontSize: 16,
+    marginBottom: 15,
+    borderWidth: 1,
+    borderColor: "#CCC",
+  },
+  button: {
+    width: "100%",
+    backgroundColor: "#002147",
+    padding: 14,
+    borderRadius: 10,
+    alignItems: "center",
+    marginTop: 10,
+  },
+  buttonText: {
+    color: "#fff",
+    fontSize: 18,
+    fontWeight: "bold",
+  },
 });
 
 export default Health;

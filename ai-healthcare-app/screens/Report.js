@@ -1,10 +1,13 @@
 import React from "react";
 import { View, Text, StyleSheet, ScrollView, Dimensions } from "react-native";
 import { LineChart, ProgressChart } from "react-native-chart-kit";
+import { useTranslation } from "react-i18next";
 
 const screenWidth = Dimensions.get("window").width;
 
 const Health = () => {
+  const { t } = useTranslation();
+
   // Dummy health data (can be replaced with actual API data)
   const healthData = {
     heartRate: [72, 75, 78, 80, 76, 74, 72], // Heart rate over time
@@ -14,41 +17,41 @@ const Health = () => {
 
   return (
     <ScrollView style={styles.container}>
-      <Text style={styles.title}>Health Monitoring</Text>
-      <Text style={styles.subtitle}>Track your health stats and progress</Text>
+      <Text style={styles.title}>{t("report_title")}</Text>
+      <Text style={styles.subtitle}>{t("report_subtitle")}</Text>
 
       {/* Heart Rate Line Chart */}
-      <Text style={styles.chartTitle}>Heart Rate (BPM)</Text>
+      <Text style={styles.chartTitle}>{t("heart_rate")}</Text>
       <LineChart
         data={{
-          labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+          labels: [t("mon"), t("tue"), t("wed"), t("thu"), t("fri"), t("sat"), t("sun")],
           datasets: [{ data: healthData.heartRate }],
         }}
         width={screenWidth - 40}
         height={220}
-        yAxisSuffix=" bpm"
+        yAxisSuffix={` ${t("bpm")}`}
         chartConfig={chartConfig}
         bezier
         style={styles.chart}
       />
 
       {/* Steps Progress Chart */}
-      <Text style={styles.chartTitle}>Daily Steps Progress</Text>
+      <Text style={styles.chartTitle}>{t("daily_steps")}</Text>
       <LineChart
         data={{
-          labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+          labels: [t("mon"), t("tue"), t("wed"), t("thu"), t("fri"), t("sat"), t("sun")],
           datasets: [{ data: healthData.steps }],
         }}
         width={screenWidth - 40}
         height={220}
-        yAxisSuffix=" steps"
+        yAxisSuffix={` ${t("steps")}`}
         chartConfig={chartConfig}
         bezier
         style={styles.chart}
       />
 
       {/* Calories Progress Chart */}
-      <Text style={styles.chartTitle}>Calories Burned Progress</Text>
+      <Text style={styles.chartTitle}>{t("calories_burned")}</Text>
       <ProgressChart
         data={{ data: [healthData.calories] }}
         width={screenWidth - 40}

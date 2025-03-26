@@ -7,11 +7,13 @@ import {
   ActivityIndicator,
 } from "react-native";
 import he from "he";
+import { useTranslation } from "react-i18next";
 
 const API_URL =
   "https://the-trivia-api.com/api/questions?categories=science&limit=10&tags=health";
 
 const Game = () => {
+  const { t } = useTranslation();
   const [questions, setQuestions] = useState([]);
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [score, setScore] = useState(0);
@@ -108,9 +110,9 @@ const Game = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Health & Medicine Quiz 🏥</Text>
+      <Text style={styles.title}>{t("game_title")}</Text>
       <Text style={styles.timer}>
-        Time Left: {Math.floor(timeLeft / 60)}:
+      {t("time_left")}: {Math.floor(timeLeft / 60)}:
         {String(timeLeft % 60).padStart(2, "0")}
       </Text>
 
@@ -119,10 +121,10 @@ const Game = () => {
       ) : showResult ? (
         <View style={styles.resultContainer}>
           <Text style={styles.resultText}>
-            Your Score: {score} / {questions.length} 🎉
+          {t("your_score")}: {score} / {questions.length} 🎉
           </Text>
           <TouchableOpacity style={styles.button} onPress={restartQuiz}>
-            <Text style={styles.buttonText}>Play Again 🔄</Text>
+            <Text style={styles.buttonText}>{t("play_again")}</Text>
           </TouchableOpacity>
         </View>
       ) : (

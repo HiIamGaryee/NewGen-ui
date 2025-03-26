@@ -9,8 +9,11 @@ import {
 } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { Ionicons } from "@expo/vector-icons";
+import { useTranslation } from "react-i18next";
 
 const Health = ({ navigation }) => {
+  const { t } = useTranslation();
+
   const availableMedicines = [
     "Vitamin C",
     "Multivitamin",
@@ -50,16 +53,16 @@ const Health = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>💊 Medicine Reminder</Text>
+      <Text style={styles.title}>{t("medicine_reminder")}</Text>
       <Text style={styles.subtitle}>
-        Stay on track with your medication schedule!
+        {t("medicine_reminder_description")}
       </Text>
 
-      <Text style={styles.selectLabel}>Select Medicine</Text>
+      <Text style={styles.selectLabel}>{t('select_medicine')}</Text>
       <View style={styles.medicineInputContainer}>
         <TextInput
           style={styles.input}
-          placeholder="Choose your medicine"
+          placeholder={t("choose_medicine_placeholder")}
           value={selectedMedicine}
           onFocus={() => setSelectedMedicine("")}
         />
@@ -81,13 +84,13 @@ const Health = ({ navigation }) => {
       {selectedMedicine === "Other" && (
         <TextInput
           style={[styles.input, { marginTop: 10 }]}
-          placeholder="Enter your medicine"
+          placeholder={t("medicine_placeholder")}
           value={customMedicine}
           onChangeText={setCustomMedicine}
         />
       )}
 
-      <Text style={styles.selectLabel}>Set Reminder Time</Text>
+      <Text style={styles.selectLabel}>{t("set_reminder_time")}</Text>
       <TouchableOpacity
         style={styles.timeButton}
         onPress={() => setShowTimePicker(true)}
@@ -110,7 +113,7 @@ const Health = ({ navigation }) => {
       )}
 
       <TouchableOpacity style={styles.addButton} onPress={addReminder}>
-        <Text style={styles.addButtonText}>➕ Add Reminder</Text>
+        <Text style={styles.addButtonText}>{t("add_reminder")}</Text>
       </TouchableOpacity>
 
       <FlatList
@@ -128,7 +131,7 @@ const Health = ({ navigation }) => {
         style={styles.chatbotButton}
         onPress={() => navigation.navigate("Chatbot")}
       >
-        <Text style={styles.chatbotButtonText}>Go to AI Assistant Chatbot</Text>
+        <Text style={styles.chatbotButtonText}>{t("go_to_aichatbox")}</Text>
       </TouchableOpacity>
     </View>
   );

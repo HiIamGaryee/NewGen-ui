@@ -13,6 +13,7 @@
   "password": "Contraseña",
   "confirm_password": "Confirmar contraseña",
   "age": "Edad",
+  "age_placeholder" : "Introduce tu edad",
   "gender": "Género",
   "male": "Hombre",
   "female": "Mujer",
@@ -52,6 +53,8 @@
   "exercise_minutes": "Duración del ejercicio (minutos)",
   "water_intake": "Consumo de agua (litros)",
   "weight": "Peso (kg)",
+  "weight_placeholder": "Introduce tu peso (kg)",
+  "height_placeholder": "Introduce tu altura (cm)",
   "submit": "Enviar",
   "health_data_saved": "Datos de salud enviados correctamente",
   "game_title": "Cuestionario de Salud y Medicina 🏥",
@@ -90,5 +93,14 @@
   "meal_origin": "🌍 Origen: {{origin}}",
   "meal_category": "🥘 Categoría: {{category}}",
   "fetch_meal_error": "No se pudo obtener la recomendación de comida.",
-  "fetch_meal_api_error": "Ocurrió un error al obtener los datos de la comida."
+  "fetch_meal_api_error": "Ocurrió un error al obtener los datos de la comida.",
+  "refresh_profile": "Actualizar perfil",
+  "medicine_reminder": "💊 Recordatorio de Medicación",
+  "medicine_reminder_description": "¡Sigue tu horario de medicación!",
+  "select_medicine": "Seleccionar Medicamento",
+  "choose_medicine_placeholder": "Elige tu medicamento",
+  "medicine_placeholder": "Introduce tu medicamento",
+  "add_reminder": "➕ Añadir Recordatorio",
+  "set_reminder_time": "Establecer Hora del Recordatorio",
+  "go_to_aichatbox": "Ir al Chatbot Asistente de IA"
 }

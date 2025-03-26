@@ -90,21 +90,21 @@ const Dashboard = () => {
 
       <TextInput
         style={styles.input}
-        placeholder="Enter Age"
+        placeholder={t('age_placeholder')}
         keyboardType="numeric"
         value={age}
         onChangeText={setAge}
       />
       <TextInput
         style={styles.input}
-        placeholder="Enter Weight (kg)"
+        placeholder={t('weight_placeholder')}
         keyboardType="numeric"
         value={weight}
         onChangeText={setWeight}
       />
       <TextInput
         style={styles.input}
-        placeholder="Enter Height (cm)"
+        placeholder={t('height_placeholder')}
         keyboardType="numeric"
         value={height}
         onChangeText={setHeight}

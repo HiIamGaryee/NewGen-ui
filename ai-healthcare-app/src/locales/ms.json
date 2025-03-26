@@ -13,6 +13,7 @@
   "password": "Kata laluan",
   "confirm_password": "Sahkan kata laluan",
   "age": "Umur",
+  "age_placeholder" : "Masukkan Umur",
   "gender": "Jantina",
   "male": "Lelaki",
   "female": "Perempuan",
@@ -52,7 +53,8 @@
   "exercise_minutes": "Tempoh senaman (minit)",
   "water_intake": "Pengambilan air (liter)",
   "weight": "Berat (kg)",
-  "submit": "Hantar",
+  "weight_placeholder" : "Masukkan Berat (kg)",
+  "submit": "Hantar", 
   "health_data_saved": "Data kesihatan berjaya dihantar",
   "game_title": "Kuiz Kesihatan & Perubatan 🏥",
   "time_left": "Masa Baki",
@@ -78,6 +80,7 @@
   "enter_age": "Masukkan umur",
   "enter_weight": "Masukkan berat (kg)",
   "enter_height": "Masukkan tinggi (cm)",
+  "height_placeholder" : "Masukkan tinggi (cm)",
   "calculate_bmi": "Kira BMI",
   "test_heartbeat": "Uji degupan jantung",
   "your_bmi": "BMI anda",
@@ -90,6 +93,15 @@
   "meal_origin": "🌍 Asal: {{origin}}",
   "meal_category": "🥘 Kategori: {{category}}",
   "fetch_meal_error": "Gagal mendapatkan cadangan hidangan.",
-  "fetch_meal_api_error": "Ralat semasa mendapatkan data hidangan."  
+  "fetch_meal_api_error": "Ralat semasa mendapatkan data hidangan.",
+  "refresh_profile" : "Segar Semula Profil",
+  "medicine_reminder": "💊 Peringatan Ubat",
+  "medicine_reminder_description": "Pastikan anda mengambil ubat mengikut jadual!",
+  "select_medicine": "Pilih Ubat",
+  "choose_medicine_placeholder": "Pilih ubat anda",
+  "medicine_placeholder": "Masukkan ubat anda",
+  "add_reminder": "➕ Tambah Peringatan",
+  "set_reminder_time": "Tetapkan Waktu Peringatan",
+  "go_to_aichatbox": "Pergi ke Chatbot Pembantu AI"  
   }
   

@@ -63,14 +63,14 @@ const SignUp = () => {
 
       const data = await response.json();
       if (response.ok) {
-        Alert.alert(t("success"), t("registration_successful"));
+        Alert.alert("success", t("registration_successful"));
         navigation.replace("Dashboard"); // Navigate to Dashboard on success
       } else {
-        Alert.alert(t("registration_failed"), data.message || t("something_wrong"));
+        Alert.alert("registration_failed", data.message || t("something_wrong"));
       }
     } catch (error) {
       console.error("Error:", error);
-      Alert.alert(t("error"), t("server_error"));
+      Alert.alert("error", t("server_error"));
     }
   };
 

@@ -10,7 +10,7 @@ import {
 } from "react-native";
 
 const AiHealthReport = () => {
-  const API_KEY = process.env.EXPO_PUBLIC_OPENAI_API_KEY;
+  const API_KEY = process.env.EXPO_PUBLIC_API_KEY;
 
   const [weight, setWeight] = useState("");
   const [height, setHeight] = useState("");
@@ -111,6 +111,7 @@ Please provide:
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
+          credentials: "include",
           body: JSON.stringify({
             weight,
             height,
@@ -159,7 +160,7 @@ Please provide:
 
       // Step B: Save that analysis + user data to your backend
       setAiAnalysis(analysis); // So user can see it
-      await postReportToBackend(analysis);
+      // await postReportToBackend(analysis);
     } catch (error) {
       Alert.alert("Error", error.message);
     } finally {

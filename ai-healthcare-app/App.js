@@ -14,7 +14,8 @@ import Dashboard from "./screens/Dashboard";
 import Diet from "./screens/Diet";
 import Game from "./screens/Game";
 import Health from "./screens/Health";
-import Report from "./screens/Report";
+import Monitor from "./screens/Monitor";
+import Report from "./services/Report";
 import Chatbot from "./screens/Chatbot";
 import "./src/i18n";
 import LanguageSwitcher from "./src/components/LanguageSwitcher";
@@ -94,6 +95,16 @@ function MainTabs({ navigation }) {
           title: t("health"),
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="heart" color={color} size={size} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Monitor"
+        component={Monitor}
+        options={{
+          title: t("monitor"),
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="pulse" color={color} size={size} />
           ),
         }}
       />

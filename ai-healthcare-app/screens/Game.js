@@ -11,7 +11,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 import he from "he";
 import { useTranslation } from "react-i18next";
 
-const API_URL = "https://the-trivia-api.com/api/questions?categories=science&limit=10&tags=health";
+const API_URL = "https://the-trivia-api.com/api/questions?categories=science&tags=health";
 
 const Game = () => {
   const { t } = useTranslation();

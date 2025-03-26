@@ -8,17 +8,17 @@ import {
   StyleSheet,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { useTranslation } from "react-i18next"; 
+import { useTranslation } from "react-i18next";
 import { useAuth } from "../context/AuthContext";
 
 const Login = () => {
   const navigation = useNavigation();
-  const { t } = useTranslation(); 
+  const { t } = useTranslation();
   const { login } = useAuth();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [errorMessage, setErrorMessage] = useState(""); // State for storing error message
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleLogin = async () => {
     if (!email || !password) {
@@ -27,19 +27,14 @@ const Login = () => {
     }
 
     try {
-      const response = await fetch("http://localhost:8080/api/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
-      });
-
       const result = await login(email, password);
       if (result.success) {
-        Alert.alert(t("success"), t("login_success"));
-        navigation.replace("Dashboard");
-        navigation.navigate("Dashboard");
+        Alert.alert(t("success"), t("login_success"), [
+          {
+            text: "OK",
+            onPress: () => navigation.replace("Dashboard"),
+          },
+        ]);
       } else {
         setErrorMessage(result.message || t("invalid_credentials"));
         Alert.alert(t("login_failed"), result.message || t("invalid_credentials"));
@@ -50,14 +45,13 @@ const Login = () => {
     }
   };
 
-
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>{t("login")}</Text> 
+      <Text style={styles.title}>{t("login")}</Text>
 
       <TextInput
         style={styles.input}
-        placeholder={t("email")} 
+        placeholder={t("email")}
         placeholderTextColor="#555"
         value={email}
         onChangeText={setEmail}
@@ -66,7 +60,7 @@ const Login = () => {
       />
       <TextInput
         style={styles.input}
-        placeholder={t("password")} 
+        placeholder={t("password")}
         placeholderTextColor="#555"
         value={password}
         onChangeText={setPassword}
@@ -76,18 +70,16 @@ const Login = () => {
         <Text style={styles.errorText}>{errorMessage}</Text>
       ) : null}
       <TouchableOpacity style={styles.button} onPress={handleLogin}>
-        <Text style={styles.buttonText}>{t("login")}</Text> 
+        <Text style={styles.buttonText}>{t("login")}</Text>
       </TouchableOpacity>
 
       <Text style={styles.registerText}>
-        {t("no_account")}{" "}
-        
+        {t("no_account")} {" "}
         <Text
           style={styles.registerLink}
           onPress={() => navigation.navigate("SignUpV2")}
         >
-          {t("sign_up")} 
-          
+          {t("sign_up")}
         </Text>
       </Text>
     </View>

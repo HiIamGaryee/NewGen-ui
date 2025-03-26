@@ -4,10 +4,11 @@ This is the backend server for our AI-powered healthcare assistant. It receives 
 
 ## How to Run This Project
 
-1. Open your terminal or Git Bash  
+1. Open your terminal or Git Bash
 2. Go to the backend folder:
+
 ```bash
-cd NewGen-backend
+cd ai-healthcare-backend
 
 Install the necessary packages:
 npm install
@@ -16,7 +17,7 @@ Start the server:
 npm start
 
 The server will run at:
-http://localhost:3000
+http://localhost:8080
 
 API Endpoints
 POST /api/health/record
@@ -70,3 +71,4 @@ zh → Chinese
 
 Example:
 http://localhost:3000/api/health/metrics?lang=es
+```

@@ -14,6 +14,7 @@ const Chatbot = () => {
   const API_KEY = process.env.EXPO_PUBLIC_API_KEY;
 
   const [messages, setMessages] = useState([]);
+
   const [input, setInput] = useState("");
 
   const fetchAIResponse = async (userInput) => {

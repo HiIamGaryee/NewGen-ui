@@ -39,7 +39,6 @@ Here are some of the key dependencies used in this project:
 git clone https://github.com/HiIamGaryee/NewGen-ui.git
 ```
 
-
 ### 3️⃣ Cd to Folder
 
 ```sh
@@ -52,22 +51,24 @@ cd ai-healthcare-app
 npm install
 ```
 
-
 ### 5️⃣ Run the App
 
 ```sh
 npx expo start
 ```
 
-
 Use the Expo Go app to scan the QR code and run it on your mobile device.
 
-## 🤝 Contribution
+## 🔐 Configuration
 
-Feel free to fork the repo and submit pull requests! If you encounter any issues, open an issue in the repository.
+Create a .env file inside the ai-healthcare-fontend folder.
+Example content.
+
+```sh
+EXPO_PUBLIC_API_KEY=YOUR_OPEN_AI_KEY
+EXPO_PUBLIC_API_URL="http://localhost:8080"
+```
 
 ## 📜 License
 
 This project is licensed under the **0BSD** License.
-
-

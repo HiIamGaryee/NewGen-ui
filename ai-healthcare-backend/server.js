@@ -8,7 +8,6 @@ import gameRoutes from "./routes/gameRoutes.js";
 import dietRoutes from "./routes/dietRoutes.js";
 import healthRoutes from "./routes/healthRoutes.js";
 import reportRoutes from "./routes/reportRoutes.js";
-import medicineRoutes from "./routes/medicineRoutes.js";
 
 import cors from "cors";
 // import i18n from "i18n";
@@ -60,7 +59,6 @@ app.use("/api/games", gameRoutes);
 app.use("/api/diet", dietRoutes);
 app.use("/api/health", healthRoutes);
 app.use("/api/report", reportRoutes);
-app.use("/api/medicine", medicineRoutes);
 
 app.use((err, req, res, next) => {
   console.error(err.stack);

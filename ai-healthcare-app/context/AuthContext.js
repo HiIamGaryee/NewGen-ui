@@ -3,6 +3,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const AuthContext = createContext();
 
+const API_KEY = process.env.EXPO_PUBLIC_API_URL;
+
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -14,7 +16,7 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (email, password) => {
     try {
-      const response = await fetch("http://localhost:8080/api/auth/login", {
+      const response = await fetch(`${API_KEY}/api/auth/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -41,7 +43,7 @@ export const AuthProvider = ({ children }) => {
 
   const logout = async () => {
     try {
-      const response = await fetch("http://localhost:8080/api/auth/logout", {
+      const response = await fetch(`${API_KEY}/api/auth/logout`, {
         method: "POST",
         credentials: "include",
       });

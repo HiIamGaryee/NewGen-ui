@@ -12,9 +12,11 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import { useTranslation } from "react-i18next";
 
-const genders = ["male", "female"];
+const genders = ["male", "female", "Non-binary"];
 
 const SignUp = () => {
+  const API_KEY = process.env.EXPO_PUBLIC_API_URL;
+
   const navigation = useNavigation();
   const { t } = useTranslation();
 
@@ -53,7 +55,7 @@ const SignUp = () => {
     };
 
     try {
-      const response = await fetch("http://localhost:8080/api/auth/register", {
+      const response = await fetch(`${API_KEY}/api/auth/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -11,6 +11,7 @@ import {
 const UserProfile = () => {
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
+  const API_KEY = process.env.EXPO_PUBLIC_API_URL;
 
   useEffect(() => {
     fetchProfile();
@@ -19,7 +20,7 @@ const UserProfile = () => {
   const fetchProfile = async () => {
     setLoading(true);
     try {
-      const response = await fetch("http://localhost:8080/api/auth/profile", {
+      const response = await fetch(`${API_KEY}/api/auth/profile`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",

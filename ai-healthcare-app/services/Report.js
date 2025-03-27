@@ -11,6 +11,7 @@ import {
 
 const AiHealthReport = () => {
   const API_KEY = process.env.EXPO_PUBLIC_API_KEY;
+  const API_KEY_V2 = process.env.EXPO_PUBLIC_API_URL;
 
   const [weight, setWeight] = useState("");
   const [height, setHeight] = useState("");
@@ -106,35 +107,32 @@ Please provide:
   const postReportToBackend = async (analysis) => {
     try {
       // If your backend requires a session cookie, also set credentials: "include"
-      const response = await fetch(
-        "http://localhost:8080/api/report/generated",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          credentials: "include",
-          body: JSON.stringify({
-            weight,
-            height,
-            bodyTemperature,
-            heartRate,
-            bloodPressure,
-            oxygenSaturation,
-            bloodSugar,
-            waterIntake,
-            mealTimes,
-            calorieIntake,
-            macronutrients,
-            exerciseMinutes,
-            stepCount,
-            sleepDuration,
-            sleepQuality,
-            workoutType,
-            moodLevel,
-            stressLevel,
-            aiAnalysis: analysis,
-          }),
-        }
-      );
+      const response = await fetch(`${API_KEY_V2}/api/report/generated`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({
+          weight,
+          height,
+          bodyTemperature,
+          heartRate,
+          bloodPressure,
+          oxygenSaturation,
+          bloodSugar,
+          waterIntake,
+          mealTimes,
+          calorieIntake,
+          macronutrients,
+          exerciseMinutes,
+          stepCount,
+          sleepDuration,
+          sleepQuality,
+          workoutType,
+          moodLevel,
+          stressLevel,
+          aiAnalysis: analysis,
+        }),
+      });
 
       const result = await response.json();
       if (response.ok) {

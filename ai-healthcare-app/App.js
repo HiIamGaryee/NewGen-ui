@@ -28,10 +28,11 @@ const AuthContext = createContext();
 const LogoutButton = ({ navigation }) => {
   const { t } = useTranslation();
   const { setUser } = useContext(AuthContext);
+  const API_KEY = process.env.EXPO_PUBLIC_API_URL;
 
   const handleLogout = async () => {
     try {
-      await axios.post("http://localhost:8080/api/auth/logout");
+      await axios.post(`${API_KEY}/api/auth/logout`);
       setUser(null); // Clear authentication state
       navigation.replace("Login"); // Redirect to login page
     } catch (error) {

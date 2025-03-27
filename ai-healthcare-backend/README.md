@@ -44,8 +44,17 @@ npm install
 ```
 
 ## 🔐 Configuration
+
 Create a .env file inside the ai-healthcare-backend folder.
-Example content refer .env.local
+Example content refer .env.example
+
+```bash
+MONGO_URI=mongodb+srv://<username>:<password>@cluster0.apaaj.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+PORT=8081
+SESSION_SECRET=your_session_secret
+NODE_ENV=development
+FRONTEND_URL="http://localhost:8081"
+```
 
 ## 🚀 Running the Server
 
@@ -57,5 +66,5 @@ The backend should now be running at:
 http://localhost:8080
 
 ## 📄 License
-This project is open-source and available under the MIT License.
 
+This project is open-source and available under the MIT License.

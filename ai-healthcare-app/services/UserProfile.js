@@ -50,14 +50,20 @@ const UserProfile = () => {
         <ActivityIndicator size="large" color="#002147" />
       ) : profile ? (
         <View style={styles.profileCard}>
-          <Text style={styles.profileTitle}>Hello, {profile.username}!</Text>
+          <Text style={styles.profileTitle}>
+            Hello, {profile.username || "-"}!
+          </Text>
           <View style={styles.infoContainer}>
-            <Text style={styles.profileInfo}>📧 Email: {profile.email}</Text>
             <Text style={styles.profileInfo}>
-              👤 Username: {profile.username}
+              📧 Email: {profile.email || "-"}
             </Text>
-            <Text style={styles.profileInfo}>⚧ Gender: {profile.gender}</Text>
-            <Text style={styles.profileInfo}>🎂 Age: {profile.age}</Text>
+            <Text style={styles.profileInfo}>
+              👤 Username: {profile.username || "-"}
+            </Text>
+            <Text style={styles.profileInfo}>
+              ⚧ Gender: {profile.gender || "-"}
+            </Text>
+            <Text style={styles.profileInfo}>🎂 Age: {profile.age || "-"}</Text>
             {profile.heartbeat && (
               <Text style={styles.profileInfo}>
                 ❤️ Heartbeat: {profile.heartbeat} BPM

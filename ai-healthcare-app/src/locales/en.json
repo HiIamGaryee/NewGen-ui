@@ -98,5 +98,6 @@
   "set_reminder_time": "Set Reminder Time",
   "go_to_aichatbox": "Go to AI Assistant Chatbot",
   "dashboard_title": "Dashboard",
-  "Calculate Bmi": "Calcular BMI"
+  "calculate_bmi": "Calcular BMI",
+  "please_enter_valid_data": "Please Enter Valid Data"
 }

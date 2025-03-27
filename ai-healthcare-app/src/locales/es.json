@@ -13,7 +13,7 @@
   "password": "Contraseña",
   "confirm_password": "Confirmar contraseña",
   "age": "Edad",
-  "age_placeholder" : "Introduce tu edad",
+  "age_placeholder": "Introduce tu edad",
   "gender": "Género",
   "male": "Hombre",
   "female": "Mujer",
@@ -102,5 +102,6 @@
   "medicine_placeholder": "Introduce tu medicamento",
   "add_reminder": "➕ Añadir Recordatorio",
   "set_reminder_time": "Establecer Hora del Recordatorio",
-  "go_to_aichatbox": "Ir al Chatbot Asistente de IA"
+  "go_to_aichatbox": "Ir al Chatbot Asistente de IA",
+  "please_enter_valid_data": "Por favor, introduzca datos válidos"
 }

@@ -51,16 +51,16 @@ const Diet = () => {
       if (data.meals) {
         setRandomMeal(data.meals[0]);
       } else {
-        Alert.alert(t("error"), t("fetch_failed"));
+        Alert.alert("Error", t("fetch_failed"));
       }
     } catch (error) {
-      Alert.alert(t("error"), t("fetch_error"));
+      Alert.alert("Error", t("fetch_error"));
     }
   };
 
   const generateMealPlan = () => {
     if (!vegetables || !meats) {
-      Alert.alert(t("error"), t("enter_ingredients"));
+      Alert.alert("Error", t("enter_ingredients"));
       return;
     }
     fetchRandomMeal();

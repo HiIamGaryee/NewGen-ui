@@ -13,6 +13,25 @@ const userSchema = new mongoose.Schema({
     },
   ],
   heartbeat: { type: Number, required: false }, // Optional field for heartbeat data
+  latestBmi: { type: Number },
+  latestHeight: { type: Number },
+  latestWeight: { type: Number },
+  latestAge: { type: Number },
+  heartRateWeek: {
+    type: [Number],
+    default: [0, 0, 0, 0, 0, 0, 0],
+  },
+  stepsWeek: {
+    type: [Number],
+    default: [0, 0, 0, 0, 0, 0, 0],
+  },
+  calorieRecords: [
+    {
+      date_created: { type: Date, default: Date.now },
+      burned: { type: Number, default: 0 },
+      consumed: { type: Number, default: 0 },
+    },
+  ],
 });
 
 export default mongoose.model("User", userSchema);

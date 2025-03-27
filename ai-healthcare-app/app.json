@@ -2,6 +2,7 @@
   "expo": {
     "name": "ai-healthcare-app",
     "slug": "ai-healthcare-app",
+    "platforms": ["ios", "android", "web"],
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -22,7 +23,9 @@
       }
     },
     "web": {
-      "bundler": "webpack",
+      "build": {
+        "output": "web-build"
+      },
       "favicon": "./assets/favicon.png"
     },
     "plugins": ["expo-localization"]

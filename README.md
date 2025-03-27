@@ -31,8 +31,9 @@ Backend: [/ai-healthcare-app/ai-healthcare-backend/README.md](https://github.com
    npm install
    ```
 
-3.`sh
-node server.js `
+3. ```sh
+   node server.js
+   ```
 
 ### Setting Up the Frontend
 
@@ -45,9 +46,11 @@ node server.js `
 2. ```sh
    npm install
    ```
+   
+3. ```sh
+   npx expo start
+   ```
 
-3.`sh
-npx expo start  `
 
 ## 🧑‍💻 Additional Information
 
@@ -57,13 +60,14 @@ Example Account
 You can log in using the following credentials Or you may register a new account on the signup page :
 
 Username:
-
-````sh
-testerA ```
+```sh
+testerA
+   ```
 
 Password:
 ```sh
-testerA ```
+testerA
+   ```
+   
 
 
-````

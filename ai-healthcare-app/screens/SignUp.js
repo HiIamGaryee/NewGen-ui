@@ -67,7 +67,7 @@ const SignUp = () => {
       const data = await response.json();
       if (response.ok) {
         Alert.alert("success", t("registration_successful"));
-        navigation.replace("Dashboard"); // Navigate to Dashboard on success
+        navigation.replace("Login"); // Navigate to Login on success
       } else {
         Alert.alert(
           t("registration_failed"),

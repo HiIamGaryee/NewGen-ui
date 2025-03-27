@@ -4,12 +4,14 @@ An AI-powered healthcare mobile application built using React Native and Expo. T
 
 ## 🚀 Features
 
-- **AI Meal Recommendations**: Get personalized meal plans based on dietary preferences.
+- **AI Meal Recommendations**: Get personalized meal plans based on dietary preferences. 👑👑
 - **Symptom Checker**: Input symptoms and receive possible diagnoses.
-- **Emergency Call**: Directly call emergency services (999) when needed.
-- **Health Tracking**: Integrate Google Fit for health data monitoring.
-- **Chat Assistant**: AI-powered chatbot for health advice.
-- **Push Notifications**: Stay updated with health reminders.
+- **Emergency Call 🚑**: Directly call emergency services (999) when needed.
+- **Health Tracking 📊**: Integrate Google Fit for health data monitoring.
+- **Chat Assistant 💬**: AI-powered chatbot for health advice. 👑
+- **Push Notifications 🔔**: Stay updated with health and medication reminders.
+- **Brain Quiz 🧠**: Keep your mind sharp with daily quizzes and fun cognitive exercises.
+- **AI Health Report 📈**: Analyze personal metrics (e.g., Weight, Height, Body Temperature, Heart Rate, Blood Pressure, Oxygen Saturation, Blood Sugar, Water Intake, Meal Times, Calorie Intake, Macronutrients, Exercise, Steps, Sleep Duration/Quality, Mood, and Stress Level) to generate and observations or suggstions for Improvement and Interesting insights. 👑👑👑
 
 ## 📦 Technologies & Packages Used
 

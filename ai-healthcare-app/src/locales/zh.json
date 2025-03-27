@@ -13,7 +13,7 @@
   "password": "密码",
   "confirm_password": "确认密码",
   "age": "年龄",
-  "age_placeholder" : "请输入年龄",
+  "age_placeholder": "请输入年龄",
   "gender": "性别",
   "male": "男",
   "female": "女",
@@ -53,7 +53,7 @@
   "exercise_minutes": "锻炼时长（分钟）",
   "water_intake": "饮水量（升）",
   "weight": "体重（公斤）",
-  "weight_placeholder" : "请输入体重（公斤）",
+  "weight_placeholder": "请输入体重（公斤）",
   "height_placeholder": "请输入身高（厘米）",
   "submit": "提交",
   "health_data_saved": "健康数据提交成功",
@@ -102,5 +102,6 @@
   "medicine_placeholder": "输入你的药物",
   "add_reminder": "➕ 添加提醒",
   "set_reminder_time": "设置提醒时间",
-  "go_to_aichatbox": "前往 AI 助手聊天框"
+  "go_to_aichatbox": "前往 AI 助手聊天框",
+  "please_enter_valid_data": "请输入正确的资料"
 }

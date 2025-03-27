@@ -2,8 +2,7 @@
 
 An AI-powered healthcare mobile and webapplication integrating on AI technologies developed by ---> Team NewGen
 This project was created by React Native, ,MongoDb and Express.js (as backend). \
-🔗 : xxx \
-Demo: xxx
+🔗 Demo: [https://youtu.be/uw7lgbJGLuU](https://youtu.be/uw7lgbJGLuU)
 
 ## 🛠 Installation & Setup
 

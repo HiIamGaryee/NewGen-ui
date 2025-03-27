@@ -8,8 +8,5 @@
       }
     }
   ],
-  "routes": [
-    { "src": "/(.*)", "dest": "/web-build/$1" },
-    { "src": "/", "dest": "/web-build/index.html" }
-  ]
+  "routes": [{ "src": "/(.*)", "dest": "/web-build/$1" }]
 }

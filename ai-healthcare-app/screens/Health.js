@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -17,9 +17,12 @@ const Health = ({ navigation }) => {
 
   const availableMedicines = [
     "Vitamin C",
-    "Multivitamin",
+    "Vitamin D",
+    "Multi-Vitamin",
     "Calcium",
     "Omega-3",
+    "B-6 Vitamin",
+    "Garlic-Plus",
     "Other",
   ];
   const [selectedMedicine, setSelectedMedicine] = useState("");
@@ -35,7 +38,7 @@ const Health = ({ navigation }) => {
   // A) Fetch all reminders from the server
   const fetchRemindersFromAPI = async () => {
     try {
-      const response = await fetch(`${API_KEY}/api/medicine`, {
+      const response = await fetch(`${API_KEY}/api/medicine/set-med`, {
         method: "GET",
         credentials: "include", // important for session
       });
@@ -60,7 +63,7 @@ const Health = ({ navigation }) => {
   // B) Add a new reminder on the server
   const addReminderToAPI = async (medicineName, reminderTimeString) => {
     try {
-      const response = await fetch(`${API_KEY}/api/medicine`, {
+      const response = await fetch(`${API_KEY}/api/medicine/set-med`, {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
@@ -120,7 +123,6 @@ const Health = ({ navigation }) => {
     <View style={styles.container}>
       <Text style={styles.title}>{t("medicine_reminder")}</Text>
       <Text style={styles.subtitle}>{t("medicine_reminder_description")}</Text>
-
       <Text style={styles.selectLabel}>{t("select_medicine")}</Text>
       <View style={styles.medicineInputContainer}>
         <TextInput
@@ -152,7 +154,6 @@ const Health = ({ navigation }) => {
           onChangeText={setCustomMedicine}
         />
       )}
-
       <Text style={styles.selectLabel}>{t("set_reminder_time")}</Text>
       <TouchableOpacity
         style={styles.timeButton}
@@ -166,6 +167,7 @@ const Health = ({ navigation }) => {
           })}
         </Text>
       </TouchableOpacity>
+
       {showTimePicker && (
         <DateTimePicker
           mode="time"
@@ -174,11 +176,9 @@ const Health = ({ navigation }) => {
           onChange={onTimeChange}
         />
       )}
-
       <TouchableOpacity style={styles.addButton} onPress={addReminder}>
         <Text style={styles.addButtonText}>{t("add_reminder")}</Text>
       </TouchableOpacity>
-
       <FlatList
         data={medicineData}
         keyExtractor={(item, index) => index.toString()}
@@ -189,7 +189,6 @@ const Health = ({ navigation }) => {
           </View>
         )}
       />
-
       <TouchableOpacity
         style={styles.chatbotButton}
         onPress={() => navigation.navigate("Chatbot")}
@@ -253,6 +252,7 @@ const styles = StyleSheet.create({
     padding: 15,
     borderRadius: 5,
     alignItems: "center",
+    marginBottom: 20,
   },
   addButtonText: { color: "#fff", fontSize: 16, fontWeight: "bold" },
   medicineItem: {

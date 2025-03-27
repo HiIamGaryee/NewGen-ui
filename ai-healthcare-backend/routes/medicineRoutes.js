@@ -9,7 +9,7 @@ const router = express.Router();
  * @desc   Add a new medication reminder for the logged-in user
  * @access Private (requires session)
  */
-router.post("/", async (req, res) => {
+router.post("/set-med", async (req, res) => {
   const userId = req.session.user;
   if (!userId) {
     return res.status(401).json({ message: "Unauthorized - not logged in" });
@@ -47,7 +47,7 @@ router.post("/", async (req, res) => {
  * @desc   Get all medication reminders for the logged-in user
  * @access Private (requires session)
  */
-router.get("/", async (req, res) => {
+router.get("/set-med", async (req, res) => {
   const userId = req.session.user;
   if (!userId) {
     return res.status(401).json({ message: "Unauthorized - not logged in" });

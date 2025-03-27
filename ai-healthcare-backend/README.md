@@ -13,14 +13,14 @@ This backend is part of a full-stack AI-powered healthcare app. It manages:
 
 ## ⚙️ Tech Stack
 
-- **Node.js** – Runtime
-- **Express.js** – Web framework
-- **MongoDB** – NoSQL database
-- **Mongoose** – ODM for MongoDB
-- **express-session** – Session management
-- **dotenv** – Environment variables
-- **bcryptjs** – Password hashing
-- **cors** – Cross-origin resource sharing
+- **[Node.js](https://nodejs.org/en)** – JavaScript runtime  
+- **[Express.js](https://expressjs.com/)** – Web framework  
+- **[MongoDB](https://www.mongodb.com/)** – NoSQL database  
+- **[Mongoose](https://mongoosejs.com/)** – ODM for MongoDB  
+- **[express-session](https://github.com/expressjs/session)** – Session management  
+- **[dotenv](https://github.com/motdotla/dotenv)** – Environment variables  
+- **[bcryptjs](https://github.com/dcodeIO/bcrypt.js)** – Password hashing  
+- **[cors](https://github.com/expressjs/cors)** – Cross-origin resource sharing  
 
 ## 📦 Prerequisites
 

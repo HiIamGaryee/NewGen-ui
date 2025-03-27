@@ -63,7 +63,7 @@ const Dashboard = () => {
       <Text style={styles.title}>{t("dashboard_title")}</Text>
       
       <TouchableOpacity style={styles.refreshButton} onPress={() => setProfileVisible(true)}>
-        <Text style={styles.refreshButtonText}>{t("refresh_profile")}</Text>
+        <Text style={styles.refreshButtonText}>{t("Profile")}</Text>
       </TouchableOpacity>
 
       <Modal visible={profileVisible} transparent animationType="slide">

@@ -8,11 +8,12 @@ import {
   Modal,
   FlatList,
   StyleSheet,
+  Image
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useTranslation } from "react-i18next";
 
-const genders = ["male", "female", "Non-binary"];
+const genders = ["Male", "Female", "Non-Binary"];
 
 const SignUp = () => {
   const API_KEY = process.env.EXPO_PUBLIC_API_URL;
@@ -81,8 +82,10 @@ const SignUp = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>{t("sign_up")}</Text>
-
+      <View style={styles.titleContainer}>
+        <Image source={require("../assets/NewGen.png")} style={styles.logo} />
+        <Text style={styles.title}>{t("sign_up")}</Text>
+      </View>
       <TextInput
         style={styles.input}
         placeholder={t("username")}
@@ -200,14 +203,25 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingHorizontal: 20,
   },
+  titleContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    marginBottom: 30,
+  },
+  logo: {
+    width: 40,
+    height: 40,
+    marginRight: 10,
+  },
   title: {
     fontSize: 28,
     fontWeight: "bold",
     color: "#001F3F",
-    marginBottom: 30,
   },
   input: {
     width: "100%",
+    maxWidth: 450,
     backgroundColor: "#F0F0F0",
     color: "#333",
     borderRadius: 10,
@@ -227,6 +241,7 @@ const styles = StyleSheet.create({
   },
   button: {
     width: "100%",
+    maxWidth: 450,
     backgroundColor: "#002147",
     padding: 14,
     borderRadius: 10,
@@ -258,6 +273,7 @@ const styles = StyleSheet.create({
     padding: 20,
     borderRadius: 10,
     width: "80%",
+    maxWidth: 450,
     alignItems: "center",
   },
   genderOption: {

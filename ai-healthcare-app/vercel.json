@@ -1,12 +1,19 @@
 {
+  "version": 2,
+  "name": "NewGen",
   "builds": [
     {
-      "src": "package.json",
+      "src": "./App.js",
       "use": "@vercel/static-build",
       "config": {
         "distDir": "web-build"
       }
     }
   ],
-  "routes": [{ "src": "/(.*)", "dest": "/web-build/$1" }]
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/"
+    }
+  ]
 }

@@ -46,29 +46,28 @@ Backend: [/ai-healthcare-app/ai-healthcare-backend/README.md](https://github.com
 2. ```sh
    npm install
    ```
-   
 3. ```sh
    npx expo start
    ```
-
 
 ## 🧑‍💻 Additional Information
 
 For detailed insights and project scope, refer to the Varsity Hackathon Presentation.
 
 Example Account
-You can log in using the following credentials Or you may register a new account on the signup page :
+You can log in using the following credentials or you may register a new account on the signup page :
 
 Username:
+
 ```sh
 testerA
-   ```
+```
 
 Password:
+
 ```sh
 testerA
-   ```
-   
+```
 
 ---
 

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -13,12 +13,16 @@ import { useTranslation } from "react-i18next";
 
 const Health = ({ navigation }) => {
   const { t } = useTranslation();
+  const API_KEY = process.env.EXPO_PUBLIC_API_URL;
 
   const availableMedicines = [
     "Vitamin C",
-    "Multivitamin",
+    "Vitamin D",
+    "Multi-Vitamin",
     "Calcium",
     "Omega-3",
+    "B-6 Vitamin",
+    "Garlic-Plus",
     "Other",
   ];
   const [selectedMedicine, setSelectedMedicine] = useState("");
@@ -27,6 +31,59 @@ const Health = ({ navigation }) => {
   const [medicineData, setMedicineData] = useState([]);
   const [showTimePicker, setShowTimePicker] = useState(false);
 
+  useEffect(() => {
+    fetchRemindersFromAPI();
+  }, []);
+
+  // A) Fetch all reminders from the server
+  const fetchRemindersFromAPI = async () => {
+    try {
+      const response = await fetch(`${API_KEY}/api/medicine/set-med`, {
+        method: "GET",
+        credentials: "include", // important for session
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.message || "Failed to fetch reminders");
+      }
+
+      const transformed = data.reminders.map((r) => ({
+        name: r.medicineName,
+        time: r.reminderTime,
+        id: r._id,
+      }));
+
+      setMedicineData(transformed);
+    } catch (error) {
+      console.error("Fetch Reminders Error:", error);
+      Alert.alert("Error", error.message);
+    }
+  };
+
+  // B) Add a new reminder on the server
+  const addReminderToAPI = async (medicineName, reminderTimeString) => {
+    try {
+      const response = await fetch(`${API_KEY}/api/medicine/set-med`, {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          medicineName,
+          reminderTime: reminderTimeString,
+        }),
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.message || "Failed to add reminder");
+      }
+      // data.reminder is the newly created reminder
+      console.log("Reminder added to server:", data.reminder);
+    } catch (error) {
+      console.error("Add Reminder Error:", error);
+      Alert.alert("Error", error.message);
+    }
+  };
+
   const onTimeChange = (event, selectedDate) => {
     if (selectedDate) {
       setReminderTime(selectedDate);
@@ -34,18 +91,29 @@ const Health = ({ navigation }) => {
     setShowTimePicker(false);
   };
 
-  const addReminder = () => {
+  // 2) Add a new reminder (locally + server)
+  const addReminder = async () => {
     const medicineName =
       selectedMedicine === "Other" ? customMedicine : selectedMedicine;
     if (!medicineName) return;
-    const newReminder = {
-      name: medicineName,
-      time: reminderTime.toLocaleTimeString([], {
-        hour: "2-digit",
-        minute: "2-digit",
-      }),
-    };
-    setMedicineData([...medicineData, newReminder]);
+
+    // Convert reminderTime to a string (e.g. "09:45")
+    const timeString = reminderTime.toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+
+    // 2A) First, add to the server
+    try {
+      await addReminderToAPI(medicineName, timeString);
+
+      // 2B) Then, re-fetch the updated list from server
+      await fetchRemindersFromAPI();
+    } catch (error) {
+      // already handled in addReminderToAPI
+    }
+
+    // 2C) Clear local states
     setSelectedMedicine("");
     setCustomMedicine("");
     setReminderTime(new Date());
@@ -54,11 +122,8 @@ const Health = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>{t("medicine_reminder")}</Text>
-      <Text style={styles.subtitle}>
-        {t("medicine_reminder_description")}
-      </Text>
-
-      <Text style={styles.selectLabel}>{t('select_medicine')}</Text>
+      <Text style={styles.subtitle}>{t("medicine_reminder_description")}</Text>
+      <Text style={styles.selectLabel}>{t("select_medicine")}</Text>
       <View style={styles.medicineInputContainer}>
         <TextInput
           style={styles.input}
@@ -89,7 +154,6 @@ const Health = ({ navigation }) => {
           onChangeText={setCustomMedicine}
         />
       )}
-
       <Text style={styles.selectLabel}>{t("set_reminder_time")}</Text>
       <TouchableOpacity
         style={styles.timeButton}
@@ -103,6 +167,7 @@ const Health = ({ navigation }) => {
           })}
         </Text>
       </TouchableOpacity>
+
       {showTimePicker && (
         <DateTimePicker
           mode="time"
@@ -111,11 +176,9 @@ const Health = ({ navigation }) => {
           onChange={onTimeChange}
         />
       )}
-
       <TouchableOpacity style={styles.addButton} onPress={addReminder}>
         <Text style={styles.addButtonText}>{t("add_reminder")}</Text>
       </TouchableOpacity>
-
       <FlatList
         data={medicineData}
         keyExtractor={(item, index) => index.toString()}
@@ -126,7 +189,6 @@ const Health = ({ navigation }) => {
           </View>
         )}
       />
-
       <TouchableOpacity
         style={styles.chatbotButton}
         onPress={() => navigation.navigate("Chatbot")}
@@ -190,6 +252,7 @@ const styles = StyleSheet.create({
     padding: 15,
     borderRadius: 5,
     alignItems: "center",
+    marginBottom: 20,
   },
   addButtonText: { color: "#fff", fontSize: 16, fontWeight: "bold" },
   medicineItem: {

@@ -33,19 +33,29 @@ Clone the repo and install dependencies:
 
 ```bash
 git clone https://github.com/HiIamGaryee/NewGen-ui.git
-cd NewGen-ui/ai-healthcare-backend
-npm install
+```
 
-🔐 Configuration
+```bash
+cd NewGen-ui/ai-healthcare-backend
+```
+
+```bash
+npm install
+```
+
+## 🔐 Configuration
 Create a .env file inside the ai-healthcare-backend folder.
 Example content refer .env.local
 
-🚀 Running the Server
+## 🚀 Running the Server
+
+```bash
 node server.js
+```
 
 The backend should now be running at:
 http://localhost:8080
 
-📄 License
+## 📄 License
 This project is open-source and available under the MIT License.
-```
+
